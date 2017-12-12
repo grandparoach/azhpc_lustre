@@ -76,10 +76,10 @@
         "description": "Admin username on all VMs."
       }
     },
-    "sshKeyData": {
+    "adminPassword": {
       "type": "string",
       "metadata": {
-        "description": "SSH rsa public key file as a string."
+        "description": "Admin password"
       }
     },
     "storageDiskSize": {
@@ -174,11 +174,10 @@
     },
     "nodeOSSettings": {
       "adminUserName": "[parameters('adminUserName')]",
-      "sshKeyData": "[parameters('sshKeyData')]",
+      "adminPassword": "[parameters('adminPassword')]",
       "imageReference": "[variables('computeNodeImages')[variables('image')]]"
     },
     "computeApiVersion": "2016-04-30-preview",
-    "sshKeyPath": "[concat('/home/',variables('nodeOSSettings').adminUserName,'/.ssh/authorized_keys')]",
     "storageDiskArray": [
       {
         "diskSizeGB": "[variables('lustreNodeSettings').storageDiskSize]",
@@ -322,7 +321,7 @@
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[parameters('vmssName')]",
       "location": "[variables('location')]",
-      "apiVersion": "[variables('computeApiVersion')]",
+      "apiVersion": "2017-03-30",
       "dependsOn": [
         "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
@@ -351,17 +350,7 @@
           "osProfile": {
             "computerNamePrefix": "[parameters('vmssName')]",
             "adminUsername": "[parameters('adminUsername')]",
-            "linuxConfiguration": {
-              "disablePasswordAuthentication": "true",
-              "ssh": {
-                "publicKeys": [
-                  {
-                    "path": "[variables('sshKeyPath')]",
-                    "keyData": "[variables('nodeOSSettings').sshKeyData]"
-                  }
-                ]
-              }
-            }
+            "adminPassword": "[parameters('adminPassword')]"
           },
           "networkProfile": {
             "networkInterfaceConfigurations": [
