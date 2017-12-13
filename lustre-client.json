@@ -90,10 +90,10 @@
         "description": "Admin username on all VMs."
       }
     },
-    "sshKeyData": {
+    "adminPassword": {
       "type": "string",
       "metadata": {
-        "description": "SSH rsa public key file as a string."
+        "description": "Admin password"
       }
     }
   },
@@ -169,13 +169,12 @@
     },
     "nodeOSSettings": {
       "adminUserName": "[parameters('adminUserName')]",
-      "sshKeyData": "[parameters('sshKeyData')]",
+      "adminPassword": "[parameters('adminPassword')]",
       "imageReference": "[variables('computeNodeImages')[variables('image')]]"
     },
     "computeApiVersion": "2016-04-30-preview",
     "vnetID": "[resourceId(variables('lustreNodeSettings').vnetRG, 'Microsoft.Network/virtualNetworks', variables('lustreNodeSettings').vnetName)]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', variables('lustreNodeSettings').subnetName)]",
-    "sshKeyPath": "[concat('/home/',variables('nodeOSSettings').adminUserName,'/.ssh/authorized_keys')]",
     "lustreInstall": "[concat('bash install_lustre.sh ', 'lustre000000', ' client')]"
   },
   "resources": [
@@ -297,14 +296,7 @@
             "adminUsername": "[parameters('adminUsername')]",
             "linuxConfiguration": {
               "disablePasswordAuthentication": "true",
-              "ssh": {
-                "publicKeys": [
-                  {
-                    "path": "[variables('sshKeyPath')]",
-                    "keyData": "[variables('nodeOSSettings').sshKeyData]"
-                  }
-                ]
-              }
+              "adminPassword": "[parameters('adminPassword')]"
             }
           },
           "networkProfile": {
