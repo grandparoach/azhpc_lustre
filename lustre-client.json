@@ -130,13 +130,19 @@
 
     "PremiumStorageMap": {
       "P10": {
-        "size": 128
+        "size": 127
       },
       "P20": {
-        "size": 512
+        "size": 511
       },
       "P30": {
         "size": 1023
+      },
+      "P40": {
+        "size": 2047
+      },
+      "P50": {
+        "size": 4094
       }
     },
     "image": "[parameters('VMImage')]",
