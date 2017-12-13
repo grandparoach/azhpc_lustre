@@ -294,10 +294,7 @@
           "osProfile": {
             "computerNamePrefix": "[parameters('vmssName')]",
             "adminUsername": "[parameters('adminUsername')]",
-            "linuxConfiguration": {
-              "disablePasswordAuthentication": "true",
-              "adminPassword": "[parameters('adminPassword')]"
-            }
+            "adminPassword": "[parameters('adminPassword')]"
           },
           "networkProfile": {
             "networkInterfaceConfigurations": [

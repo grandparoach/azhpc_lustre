@@ -13,7 +13,8 @@ Table of Contents
 # Lustre
 Lustre is currently the most widely used parallel file system in HPC solutions. Lustre file systems can scale to tens of thousands of client nodes, tens of petabytes of storage. Lustre file system performed well for large file system, you can refer the testing results for the same.
 
-
+# Architecture
+![Lustre Architecture](/images/lustre_arch.png)
 
 Note- Before setup Gluster FS make sure you have service principal (id, secrete and tenant id) to get artifacts from Azure.
 # Deployment steps
