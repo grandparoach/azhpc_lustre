@@ -207,7 +207,7 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[toLower(substring(concat(parameters('jumpboxName'), uniqueString(resourceGroup().id)), 0, 9))]"
+          "domainNameLabel": "[toLower(substring(concat(variables('jumpboxName'), uniqueString(resourceGroup().id)), 0, 9))]"
         }
       }
     },
