@@ -269,12 +269,12 @@
         },
         "networkProfile": {
           "networkInterfaces": [{
-            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('jumpboxName'),'nic')]"
+            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('jumpboxName'),'nic'))]"
           }]
         }
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/',concat(variables('jumpboxName'),'nic'))]"
+        "[concat('Microsoft.Network/networkInterfaces/',concat(variables('jumpboxName'),'nic'))s]"
       ]
     },
     { "type": "Microsoft.Compute/virtualMachineScaleSets",
