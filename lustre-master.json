@@ -9,16 +9,6 @@
       },
       "maxLength": 15
     },
-    "nodeCount": {
-      "type": "int",
-      "metadata": {
-        "description": "Number of lustre nodes (100 or less)."
-      },
-      "defaultValue": 1,
-      "minValue": 1,
-      "maxValue": 1
-
-    },
     "VMSize": {
       "type": "string",
       "defaultValue": "Standard_DS3_v2",
@@ -282,7 +272,7 @@
       "location": "[variables('location')]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[parameters('jumpboxSku')]"
+          "vmSize": "Standard_D12_v2"
         },
         "osProfile": {
           "computerName": "[variables('jumpboxName')]",
@@ -329,7 +319,7 @@
       "sku": {
         "name": "[variables('lustreNodeSettings').VMsku]",
         "tier": "Standard",
-        "capacity": "[parameters('nodeCount')]"
+        "capacity": 1
       },
       "properties": {
         "overprovision": "false",
