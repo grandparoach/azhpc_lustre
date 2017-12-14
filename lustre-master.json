@@ -95,7 +95,7 @@
     "lustreNodeSettings": {
       "VMsku": "[parameters('VMSize')]",
       "storageDiskSize": "[variables('storageDiskSize')]",
-      "numStorageDisks": "[parameters('storageDisksCount')]",
+      "numStorageDisks": "[variables('numStorageDisks')]",
       "numStorageDisksLast": 1,
       "numMetadataDisks": 0
     },
