@@ -71,27 +71,6 @@
       "metadata": {
         "description": "SSH rsa public key file as a string."
       }
-    },
-    "storageDiskSize": {
-      "type": "string",
-      "defaultValue": "P30",
-      "allowedValues": [
-        "P10",
-        "P20",
-        "P30"
-      ],
-      "metadata": {
-        "description": "Premium storage disk size used for the storage services"
-      }
-    },
-    "StorageDisksCount": {
-      "type": "int",
-      "defaultValue": 1,
-      "minValue": 0,
-      "maxValue": 1,
-      "metadata": {
-        "description": "Number of storage disks"
-      }
     }
   },
   "variables": {
@@ -103,8 +82,8 @@
     "vmssCountVolume": 1,
     "jumpboxName": "lustrejumpbox",
     "subnetName": "lustre-subnet",
-    "storageDiskSize": "[variables('PremiumStorageMap')[parameters('storageDiskSize')].size]",
-    "numStorageDisks": "[parameters('storageDisksCount')]",
+    "storageDiskSize": 512,
+    "numStorageDisks": 1,
     "numMetadataDisks": 0,
     "nicName": "[concat(parameters('vmssName'), 'nic')]",
     "ipConfigName": "[concat(parameters('vmssName'), 'ipconfig')]",
@@ -112,21 +91,10 @@
     "insightsApiVersion": "2015-04-01",
     "location": "[resourceGroup().location]",
     "installLIS": "bash InstallLIS.sh",    
-    "PremiumStorageMap": {
-      "P10": {
-        "size": 128
-      },
-      "P20": {
-        "size": 512
-      },
-      "P30": {
-        "size": 1023
-      }
-    },
     "image": "[parameters('VMImage')]",
     "lustreNodeSettings": {
       "VMsku": "[parameters('VMSize')]",
-      "storageDiskSize": "[variables('PremiumStorageMap')[parameters('storageDiskSize')].size]",
+      "storageDiskSize": "[variables('storageDiskSize')]",
       "numStorageDisks": "[parameters('storageDisksCount')]",
       "numStorageDisksLast": 1,
       "numMetadataDisks": 0
@@ -249,7 +217,7 @@
       "location": "[variables('location')]",
       "properties": {
         "ipConfigurations": [{
-          "name": "[concat(variables('jumpboxName'),ipconfig)]",
+          "name": "[concat(variables('jumpboxName'),'ipconfig')]",
           "properties": {
             "privateIPAllocationMethod": "Dynamic",
             "publicIPAddress": {
