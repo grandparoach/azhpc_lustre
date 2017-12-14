@@ -59,6 +59,7 @@
   "variables": {
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
+    "subnetPrefix2": "10.0.1.0/24",
     "virtualNetworkName": "lustre-vnet",
     "vmssName": "mgsmdt",
     "vmsscount": 2,
@@ -66,6 +67,7 @@
     "vmssCountVolume": 1,
     "jumpboxName": "[toLower(concat('a',substring(uniqueString(resourceGroup().id),4,4),'jumpbox'))]",
     "subnetName": "lustre-subnet",
+    "subnetName2": "compute-subnet",
     "storageDiskSize": 512,
     "numStorageDisks": 1,
     "numMetadataDisks": 0,
@@ -180,6 +182,12 @@
             "properties": {
               "addressPrefix": "[variables('subnetPrefix')]"
             }
+          },
+          {
+            "name": "[variables('subnetName2')]",
+            "properties": {
+              "addressPrefix": "[variables('subnetPrefix2')]"
+            }
           }
         ]
       }
@@ -208,7 +216,7 @@
               "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('jumpboxName'),'pip'))]"
             },
             "subnet": {
-              "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName'))]"
+              "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName2'))]"
             }
           }
         }]
