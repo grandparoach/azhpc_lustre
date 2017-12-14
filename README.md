@@ -1,15 +1,22 @@
 # azhpc_lustre
-Template to setup LustreFS on VMSS
+Template to setup LustreFS using VMSS
 
 Table of Contents
 =================
+* [Quickstart](#Lustre)
 * [Lustre](#Lustre)
 * [Deployment steps](#deployment-steps)
-  * [Deploy the Lustre MDS/MGS](#Deploy-the-Lustre-MDS/MGS)
+  * [Deploy Lustre MDS/MGS](#Deploy-the-Lustre-MDS/MGS)
   * [Deploy Lustre OSS](#Deploy-Lustre-OSS)
   * [Deploy Lustre Client](#Deploy-Lustre-Client)
 
- 
+# Quickstart
+* Deploy the Lustre MDS/MGS [![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-master.json) 
+
+* Deploy the Lustre OSS [![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-server.json)
+
+*Deploy the Lustre Clients [![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-client.json)
+
 # Lustre
 Lustre is currently the most widely used parallel file system in HPC solutions. Lustre file systems can scale to tens of thousands of client nodes, tens of petabytes of storage. Lustre file system performed well for large file system, you can refer the testing results for the same.
 
@@ -41,7 +48,7 @@ You have to provide these parameters to the template :
 * _Storage Disk Count_ : Provide the no. of storage disk as per requirement.
 
 ## Deploy Lustre MDS/MGS
-[![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2FSSH-Key-Version%2Flustre-master.json) 
+[![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-master.json) 
 
 ## Deploy the Lustre OSS
 Data in the Lustre filesystem is stored and retrieved by two components: the Object Storage Server (OSS, a server node) and the Object Storage Target (OST, the HDD/SSD that stores the data). Together, the OSS and OST provide the data to the Client.
@@ -67,7 +74,7 @@ You have to provide these parameters to the template :
 * _Storage Disks Count_ : Enter the disks count.
 
 ## Deploy Lustre OS
-[![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2FSSH-Key-Version%2Flustre-server.json)
+[![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-server.json)
 
 ## Deploy the Lustre Client
 A Client in the Lustre filesystem is a machine that requires data. This could be a computation, visualization, or desktop node. Once mounted, a Client experiences the Lustre filesystem as if the filesystem were a local or NFS mount.
@@ -88,4 +95,4 @@ You have to provide these parameters to the template :
 
 
 ## Deploy Lustre Client
-[![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2FSSH-Key-Version%2Flustre-client.json)
+[![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-client.json)

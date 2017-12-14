@@ -54,9 +54,7 @@
         "Standard_L4s",
         "Standard_L8s",
         "Standard_L16s",
-        "Standard_L32s",
-        "Standard_H16r",
-        "Standard_H16mr"
+        "Standard_L32s"
       ],
       "metadata": {
         "description": "sku to use for the storage nodes - only premium disks VMs are allowed"
@@ -93,10 +91,10 @@
         "description": "Admin username on all VMs."
       }
     },
-    "adminPassword": {
+    "sshKeyData": {
       "type": "string",
       "metadata": {
-        "description": "Admin password"
+        "description": "SSH rsa public key file as a string."
       }
     }
   },
@@ -133,19 +131,13 @@
 
     "PremiumStorageMap": {
       "P10": {
-        "size": 127
+        "size": 128
       },
       "P20": {
-        "size": 511
+        "size": 512
       },
       "P30": {
         "size": 1023
-      },
-      "P40": {
-        "size": 2047
-      },
-      "P50": {
-        "size": 4094
       }
     },
     "image": "[parameters('VMImage')]",
@@ -184,12 +176,13 @@
     },
     "nodeOSSettings": {
       "adminUserName": "[parameters('adminUserName')]",
-      "adminPassword": "[parameters('adminPassword')]",
+      "sshKeyData": "[parameters('sshKeyData')]",
       "imageReference": "[variables('computeNodeImages')[variables('image')]]"
     },
     "computeApiVersion": "2016-04-30-preview",
     "vnetID": "[resourceId(variables('lustreNodeSettings').vnetRG, 'Microsoft.Network/virtualNetworks', variables('lustreNodeSettings').vnetName)]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', variables('lustreNodeSettings').subnetName)]",
+    "sshKeyPath": "[concat('/home/',variables('nodeOSSettings').adminUserName,'/.ssh/authorized_keys')]",
     "lustreInstall": "[concat('bash install_lustre.sh ', 'lustre000000', ' client')]"
   },
   "resources": [
@@ -309,7 +302,17 @@
           "osProfile": {
             "computerNamePrefix": "[parameters('vmssName')]",
             "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]"
+            "linuxConfiguration": {
+              "disablePasswordAuthentication": "true",
+              "ssh": {
+                "publicKeys": [
+                  {
+                    "path": "[variables('sshKeyPath')]",
+                    "keyData": "[variables('nodeOSSettings').sshKeyData]"
+                  }
+                ]
+              }
+            }
           },
           "networkProfile": {
             "networkInterfaceConfigurations": [
@@ -357,7 +360,7 @@
                     "fileUris": [
                       "[uri(deployment().properties.templateLink.uri, 'scripts/install_lustre_client.sh')]"
                     ],
-                    "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/azmigproject/LustreFS-ARM/master/scripts')]"
+                    "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts')]"
                   }
                 }
               }

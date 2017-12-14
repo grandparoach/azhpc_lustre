@@ -76,10 +76,10 @@
         "description": "Admin username on all VMs."
       }
     },
-    "adminPassword": {
+    "sshKeyData": {
       "type": "string",
       "metadata": {
-        "description": "Admin password"
+        "description": "SSH rsa public key file as a string."
       }
     },
     "storageDiskSize": {
@@ -174,10 +174,11 @@
     },
     "nodeOSSettings": {
       "adminUserName": "[parameters('adminUserName')]",
-      "adminPassword": "[parameters('adminPassword')]",
+      "sshKeyData": "[parameters('sshKeyData')]",
       "imageReference": "[variables('computeNodeImages')[variables('image')]]"
     },
     "computeApiVersion": "2016-04-30-preview",
+    "sshKeyPath": "[concat('/home/',variables('nodeOSSettings').adminUserName,'/.ssh/authorized_keys')]",
     "storageDiskArray": [
       {
         "diskSizeGB": "[variables('lustreNodeSettings').storageDiskSize]",
@@ -321,7 +322,7 @@
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[parameters('vmssName')]",
       "location": "[variables('location')]",
-      "apiVersion": "2017-03-30",
+      "apiVersion": "[variables('computeApiVersion')]",
       "dependsOn": [
         "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
@@ -350,7 +351,17 @@
           "osProfile": {
             "computerNamePrefix": "[parameters('vmssName')]",
             "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]"
+            "linuxConfiguration": {
+              "disablePasswordAuthentication": "true",
+              "ssh": {
+                "publicKeys": [
+                  {
+                    "path": "[variables('sshKeyPath')]",
+                    "keyData": "[variables('nodeOSSettings').sshKeyData]"
+                  }
+                ]
+              }
+            }
           },
           "networkProfile": {
             "networkInterfaceConfigurations": [
@@ -399,7 +410,7 @@
                       "[uri(deployment().properties.templateLink.uri, 'scripts/master-setup.sh')]",
                       "[uri(deployment().properties.templateLink.uri, 'scripts/install_lustre.sh')]"
                     ],
-                    "commandToExecute": "[concat('bash master-setup.sh ',variables('nodeOSSettings').adminUserName,';','bash install_lustre.sh ', 'meta',' ','https://raw.githubusercontent.com/azmigproject/LustreFS-ARM/master/scripts')]"
+                    "commandToExecute": "[concat('bash master-setup.sh ',variables('nodeOSSettings').adminUserName,';','bash install_lustre.sh ', 'meta',' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts')]"
                   }
                 }
               }

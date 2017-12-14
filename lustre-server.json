@@ -101,10 +101,10 @@
         "description": "Admin username on all VMs."
       }
     },
-    "adminPassword": {
+    "sshKeyData": {
       "type": "string",
       "metadata": {
-        "description": "Admin password"
+        "description": "SSH rsa public key file as a string."
       }
     },
     "storageDiskSize": {
@@ -113,9 +113,7 @@
       "allowedValues": [
         "P10",
         "P20",
-        "P30",
-        "P40",
-        "P50"
+        "P30"
       ],
       "metadata": {
         "description": "Premium storage disk size used for the storage services"
@@ -215,10 +213,11 @@
     },
     "nodeOSSettings": {
       "adminUserName": "[parameters('adminUserName')]",
-      "adminPassword": "[parameters('adminPassword')]",
+      "sshKeyData": "[parameters('sshKeyData')]",
       "imageReference": "[variables('computeNodeImages')[variables('image')]]"
     },
     "computeApiVersion": "2016-04-30-preview",
+    "sshKeyPath": "[concat('/home/',variables('nodeOSSettings').adminUserName,'/.ssh/authorized_keys')]",
     "lustreInstall": "[concat('bash install_lustre.sh ', 'lustre000000', ' client')]",
     "storageDiskArray": [
       {
@@ -392,7 +391,17 @@
           "osProfile": {
             "computerNamePrefix": "[parameters('vmssName')]",
             "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]",
+            "linuxConfiguration": {
+              "disablePasswordAuthentication": "true",
+              "ssh": {
+                "publicKeys": [
+                  {
+                    "path": "[variables('sshKeyPath')]",
+                    "keyData": "[variables('nodeOSSettings').sshKeyData]"
+                  }
+                ]
+              }
+            }
           },
           "networkProfile": {
             "networkInterfaceConfigurations": [
@@ -440,7 +449,7 @@
                     "fileUris": [
                       "[uri(deployment().properties.templateLink.uri, 'scripts/install_lustre_storage.sh')]"                      
                     ],
-                    "commandToExecute": "[concat('bash install_lustre_storage.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/azmigproject/LustreFS-ARM/master/scripts',' ',variables('vmssName'),' ',variables('resourceGroup'),' ',variables('clientId'),' ',variables('clientSecret'),' ',variables('tenantId'),' ',variables('nodeCount'))]"
+                    "commandToExecute": "[concat('bash install_lustre_storage.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts',' ',variables('vmssName'),' ',variables('resourceGroup'),' ',variables('clientId'),' ',variables('clientSecret'),' ',variables('tenantId'),' ',variables('nodeCount'))]"
                   }
                 }
               }
