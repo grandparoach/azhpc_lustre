@@ -2,13 +2,6 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vmssName": {
-      "type": "string",
-      "metadata": {
-        "description": "Master VMSS name."
-      },
-      "maxLength": 15
-    },
     "VMSize": {
       "type": "string",
       "defaultValue": "Standard_DS3_v2",
@@ -50,16 +43,6 @@
         "description": "sku to use for the storage nodes - only premium disks VMs are allowed"
       }
     },
-    "VMImage": {
-      "type": "string",
-      "defaultValue": "CentOS_7.3",
-      "allowedValues": [
-        "CentOS_7.3"
-      ],
-      "metadata": {
-        "description": "VM Image."
-      }
-    },   
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -79,20 +62,20 @@
     "virtualNetworkName": "lustre-vnet",
     "vmssName": "[toLower(substring(concat(uniqueString(resourceGroup().id),'mksmdt'),13,18))]",
     "vmsscount": 2,
-    "vmssNameVolume": "[concat(parameters('vmssName'), 'last')]",
+    "vmssNameVolume": "[concat(variables('vmssName'), 'last')]",
     "vmssCountVolume": 1,
     "jumpboxName": "[toLower(substring(concat(uniqueString(resourceGroup().id),'jumpbox'),12,19))]",
     "subnetName": "lustre-subnet",
     "storageDiskSize": 512,
     "numStorageDisks": 1,
     "numMetadataDisks": 0,
-    "nicName": "[concat(parameters('vmssName'), 'nic')]",
-    "ipConfigName": "[concat(parameters('vmssName'), 'ipconfig')]",
+    "nicName": "[concat(variables('vmssName'), 'nic')]",
+    "ipConfigName": "[concat(variables('vmssName'), 'ipconfig')]",
     "networkApiVersion": "2016-06-01",
     "insightsApiVersion": "2015-04-01",
     "location": "[resourceGroup().location]",
     "installLIS": "bash InstallLIS.sh",    
-    "image": "[parameters('VMImage')]",
+    "image": "CentOS_7.3",
     "lustreNodeSettings": {
       "VMsku": "[parameters('VMSize')]",
       "storageDiskSize": "[variables('storageDiskSize')]",
@@ -279,7 +262,7 @@
       ]
     },
     { "type": "Microsoft.Compute/virtualMachineScaleSets",
-      "name": "[parameters('vmssName')]",
+      "name": "[variables('vmssName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('computeApiVersion')]",
       "dependsOn": [
@@ -307,7 +290,7 @@
             "dataDisks": "[concat(take(variables('storageDiskArray'),variables('lustreNodeSettings').numStorageDisks))]"
           },
           "osProfile": {
-            "computerNamePrefix": "[parameters('vmssName')]",
+            "computerNamePrefix": "[variables('vmssName')]",
             "adminUsername": "[parameters('adminUsername')]",
             "linuxConfiguration": {
               "disablePasswordAuthentication": "true",
