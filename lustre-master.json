@@ -111,6 +111,7 @@
     "vmsscount": 2,
     "vmssNameVolume": "[concat(parameters('vmssName'), 'last')]",
     "vmssCountVolume": 1,
+    "jumpboxName": "lustrejumpbox",
     "subnetName": "lustre-subnet",
     "storageDiskSize": "[variables('PremiumStorageMap')[parameters('storageDiskSize')].size]",
     "numStorageDisks": "[parameters('storageDisksCount')]",
@@ -221,8 +222,7 @@
     ]
   },
   "resources": [
-    {
-      "type": "Microsoft.Network/virtualNetworks",
+    { "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('networkApiVersion')]",
@@ -241,9 +241,85 @@
           }
         ]
       }
+    }, 
+    {"type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(variables('jumpboxName'),'pip')]",
+      "apiVersion": "[variables('networkApiVersion')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[toLower(substring(concat(parameters('jumpboxName'), uniqueString(resourceGroup().id)), 0, 9))]"
+        }
+      }
     },
-    {
-      "type": "Microsoft.Compute/virtualMachineScaleSets",
+    { "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('jumpboxName'),'nic')]",
+      "apiVersion": "[variables('networkApiVersion')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "ipConfigurations": [{
+          "name": "[concat(variables('jumpboxName'),ipconfig)]",
+          "properties": {
+            "privateIPAllocationMethod": "Dynamic",
+            "publicIPAddress": {
+              "id": "[resourceId('Microsoft.Network/publicIPAddresses/',variables('jumpboxName'),'pip')]"
+            },
+            "subnet": {
+              "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName'))]"
+            }
+          }
+        }]
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('jumpboxName'),'pip')]",
+        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+      ]
+    },
+    { "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('jumpboxName')]",
+      "apiVersion": "[variables('computeApiVersion')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('jumpboxSku')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('jumpboxName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": "true",
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "[variables('sshKeyPath')]",
+                  "keyData": "[variables('nodeOSSettings').sshKeyData]"
+                }
+              ]
+            }
+          }
+        },
+        "storageProfile": {
+          "imageReference": "[variables('nodeOSSettings').imageReference]",
+          "osDisk": {
+            "name": "[concat(variables('jumpboxName'), 'disk')]", 
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            },
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [{
+            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('jumpboxName'),'nic')]"
+          }]
+        }
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('jumpboxName'),'nic')]"
+      ]
+    },
+    { "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[parameters('vmssName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('computeApiVersion')]",
