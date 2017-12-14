@@ -221,7 +221,7 @@
           "properties": {
             "privateIPAllocationMethod": "Dynamic",
             "publicIPAddress": {
-              "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('jumpboxName'),'pip')]"
+              "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('jumpboxName'),'pip'))]"
             },
             "subnet": {
               "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName'))]"
