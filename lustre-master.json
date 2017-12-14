@@ -60,7 +60,7 @@
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
     "virtualNetworkName": "lustre-vnet",
-    "vmssName": "mksmdt",
+    "vmssName": "mgsmdt",
     "vmsscount": 2,
     "vmssNameVolume": "[concat(variables('vmssName'), 'last')]",
     "vmssCountVolume": 1,
