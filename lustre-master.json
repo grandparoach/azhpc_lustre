@@ -77,10 +77,11 @@
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
     "virtualNetworkName": "lustre-vnet",
+    "vmssName": "[toLower(substring(concat(uniqueString(resourceGroup().id),'mksmdt'),13,19))]",
     "vmsscount": 2,
     "vmssNameVolume": "[concat(parameters('vmssName'), 'last')]",
     "vmssCountVolume": 1,
-    "jumpboxName": "lustrejumpbox",
+    "jumpboxName": "[toLower(substring(concat(uniqueString(resourceGroup().id),'jumpbox'),12,19))]",
     "subnetName": "lustre-subnet",
     "storageDiskSize": 512,
     "numStorageDisks": 1,
@@ -207,7 +208,7 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[toLower(substring(concat(variables('jumpboxName'), uniqueString(resourceGroup().id)), 0, 9))]"
+          "domainNameLabel": "[variables('jumpboxName')]"
         }
       }
     },
