@@ -42,6 +42,7 @@ You have to provide these parameters to the template :
 
 ## Deploy Lustre MDS/MGS
 [![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2FSSH-Key-Version%2Flustre-master.json) 
+
 ## Deploy the Lustre OSS
 Data in the Lustre filesystem is stored and retrieved by two components: the Object Storage Server (OSS, a server node) and the Object Storage Target (OST, the HDD/SSD that stores the data). Together, the OSS and OST provide the data to the Client.
 
@@ -65,7 +66,7 @@ You have to provide these parameters to the template :
 * _Storage Disks Size_ : Select the disks size from the dropdown.
 * _Storage Disks Count_ : Enter the disks count.
 
-## Deploy Lustre OSS
+## Deploy Lustre OS
 [![Click to deploy template on Azure](http://azuredeploy.net/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2FSSH-Key-Version%2Flustre-server.json)
 
 ## Deploy the Lustre Client
