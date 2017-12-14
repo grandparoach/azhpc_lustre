@@ -54,7 +54,9 @@
         "Standard_L4s",
         "Standard_L8s",
         "Standard_L16s",
-        "Standard_L32s"
+        "Standard_L32s",
+        "Standard_H16r",
+        "Standard_H16mr"
       ],
       "metadata": {
         "description": "sku to use for the storage nodes - only premium disks VMs are allowed"
