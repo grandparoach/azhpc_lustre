@@ -11,13 +11,16 @@ Table of Contents
   * [Deploy Lustre Client](#Deploy-Lustre-Client)
 
 # Quickstart
-* Deploy the Lustre MDS/MGS 
+* Deploy the Lustre MDS/MGS
+
 [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-master.json) 
 
-* Deploy the Lustre OSS 
+* Deploy the Lustre OSS
+
 [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-server.json)
 
-* Deploy the Lustre Clients 
+* Deploy the Lustre Clients
+
 [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-client.json)
 
 # Lustre
