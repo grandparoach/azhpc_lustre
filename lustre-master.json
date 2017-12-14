@@ -274,7 +274,7 @@
         }
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('jumpboxName'),'nic')]"
+        "[concat('Microsoft.Network/networkInterfaces/',concat(variables('jumpboxName'),'nic'))]"
       ]
     },
     { "type": "Microsoft.Compute/virtualMachineScaleSets",
