@@ -77,7 +77,7 @@
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
     "virtualNetworkName": "lustre-vnet",
-    "vmssName": "[toLower(substring(concat(uniqueString(resourceGroup().id),'mksmdt'),13,19))]",
+    "vmssName": "[toLower(substring(concat(uniqueString(resourceGroup().id),'mksmdt'),13,18))]",
     "vmsscount": 2,
     "vmssNameVolume": "[concat(parameters('vmssName'), 'last')]",
     "vmssCountVolume": 1,
