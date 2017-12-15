@@ -53,17 +53,6 @@
         "description": "sku to use for the storage nodes - only premium disks VMs are allowed"
       }
     },
-    "VMImage": {
-      "type": "string",
-      "defaultValue": "CentOS_7.3",
-      "allowedValues": [
-        "CentOS_7.2",
-        "CentOS_7.3"
-      ],
-      "metadata": {
-        "description": "VM Image."
-      }
-    },
     "clientId": {
       "type": "string",
       "metadata": {
@@ -119,12 +108,8 @@
     }
   },
   "variables": {
-    "addressPrefix": "10.0.0.0/16",
-    "subnetPrefix": "10.0.0.0/24",
     "virtualNetworkName": "lustre-vnet",
-    "vmsscount": 2,
     "vmssNameVolume": "[concat(variables('vmssName'), 'last')]",
-    "vmssCountVolume": 1,
     "subnetName": "lustre-subnet",
     "vmssName": "ossserver",
     "mgsNodeName": "mgsmdt",
@@ -141,7 +126,6 @@
     "networkApiVersion": "2016-06-01",
     "insightsApiVersion": "2015-04-01",
     "location": "[resourceGroup().location]",
-    "installLIS": "bash InstallLIS.sh",
     "PremiumStorageMap": {
       "P10": {
         "size": 128
@@ -159,7 +143,7 @@
         "size": 4094
       }
     },
-    "image": "[parameters('VMImage')]",
+    "image": "CentOS_7.3",
     "lustreNodeSettings": {
       "VMsku": "[parameters('VMSize')]",
       "storageDiskSize": "[variables('PremiumStorageMap')[parameters('storageDiskSize')].size]",
@@ -249,29 +233,7 @@
     ]
   },
   "resources": [
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "name": "[variables('virtualNetworkName')]",
-      "location": "[variables('location')]",
-      "apiVersion": "[variables('networkApiVersion')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[variables('addressPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[variables('subnetName')]",
-            "properties": {
-              "addressPrefix": "[variables('subnetPrefix')]"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachineScaleSets",
+    {"type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[variables('vmssName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('computeApiVersion')]",
