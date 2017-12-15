@@ -237,9 +237,6 @@
       "name": "[variables('vmssName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('computeApiVersion')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
-      ],
       "sku": {
         "name": "[variables('lustreNodeSettings').VMsku]",
         "tier": "Standard",
