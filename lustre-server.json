@@ -116,7 +116,7 @@
     "subnetName": "lustre-subnet",
     "subnetName2": "compute-subnet",
     "vmssName": "ossserver",
-    "mgsNodeName": "mgsmdt",
+    "mgsNodeName": "mgsmdt000000",
     "nodeCount": "[parameters('nodeCount')]",
     "resourceGroup": "[resourceGroup().name]",
     "clientId": "[parameters('clientId')]",
