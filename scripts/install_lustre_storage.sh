@@ -153,7 +153,7 @@ install_lustre()
      yum -y install e2fsprogs
      yum -y install lustre-tests-2.9.0-1.el7.x86_64
 
-     echo “options lnet networks=tcp”> /etc/modprobe.d/lnet.conf
+     echo "options lnet networks=tcp"> /etc/modprobe.d/lnet.conf
      chkconfig lnet --add
      chkconfig lnet on
      chkconfig lustre --add
