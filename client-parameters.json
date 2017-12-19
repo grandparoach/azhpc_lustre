@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters":{
+        "vmssName": {
+            "value": "compute"
+        },
+		"nodeCount": {
+			"value": _COMPNODES
+        },		
+        "VMSize": {
+			"value": "Standard_H16r"
+		},
+		"VMImage": {
+			"value": "CentOS_7.1-HPC"
+        },
+        "vnetRG": {
+			"value": "_RG"
+        },
+        "adminUsername": {
+			"value": "lustreuser"
+        },
+        "sshKeyData": {
+			"value": "_SSHKEY"
+        }
+	}
+}

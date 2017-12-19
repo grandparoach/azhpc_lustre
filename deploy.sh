@@ -3,6 +3,7 @@
 set -x
 RG=$1
 storageDisks=8
+computeNodes=8
 #set -xeuo pipefail
 LOGDIR=LOGDIR_`date +%F%T`_$RG
 mkdir $LOGDIR
@@ -24,7 +25,7 @@ az group deployment create --name lustremasterdeployment -o table --resource-gro
 mv master-parameters.json $LOGDIR/master-parameters.json
 mv .master-parameters.json.orig master-parameters.json
 
-pubip=az network public-ip list -g $RG --query [0].['ipAddress'][0] -o tsv
+pubip=`az network public-ip list -g $RG --query [0].['ipAddress'][0] -o tsv`    
 scp -i id_rsa_lustre id_rsa_lustre lustreuser@$pubip:/home/lustreuser/.ssh/
 mv id_rsa_lustre* $LOGDIR/
 
@@ -47,4 +48,17 @@ az group deployment create --name lustreserverdeployment -o table --resource-gro
 mv server-parameters.json $LOGDIR/server-parameters.json
 mv .server-parameters.json.orig server-parameters.json
 
-#CLIENT
+#CREATE CLIENTS
+echo ------------------------- `date +%F" "%T` Creating Client Cluster
+cp client-parameters.json .client-parameters.json.orig
+
+sed -i "s%_COMPNODES%$computeNodes%g" client-parameters.json
+sed -i "s%_RG%$RG%g" client-parameters.json
+sed -i "s%_SSHKEY%$sshkey%g" client-parameters.json
+
+az group deployment validate -o table --resource-group $RG --template-file lustre-client.json --parameters @client-parameters.json
+az group deployment create --name lustreclientdeployment -o table --resource-group $RG --template-file lustre-client.json --parameters @client-parameters.json
+
+mv client-parameters.json $LOGDIR/client-parameters.json
+mv .client-parameters.json.orig client-parameters.json
+echo ------------------------- `date +%F" "%T` Finished

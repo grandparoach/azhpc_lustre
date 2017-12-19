@@ -1,13 +1,13 @@
 {
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
-  "parameters": {
+  "parameters": {  
     "vmssName": {
       "type": "string",
-      "metadata": {
-        "description": "Master VMSS name."
-      },
-      "maxLength": 15
+        "metadata": {
+          "description": "Master VMSS name."
+        },
+        "maxLength": 15
     },
     "nodeCount": {
       "type": "int",
@@ -101,6 +101,7 @@
     }
   },
   "variables": {
+    "myTemplateLink": "https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/",
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
     "virtualNetworkName": "lustre-vnet",
@@ -112,9 +113,6 @@
     "networkApiVersion": "2016-06-01",
     "insightsApiVersion": "2015-04-01",
     "location": "[resourceGroup().location]",
-    "installLIS": "bash InstallLIS.sh",
-    "templatelink": "[uri(deployment().properties.templateLink.uri, 'Scripts')]",
-    "installLIS": "bash InstallLIS.sh",
     "networkSettings": {
       "addressPrefix": "10.0.0.0/20",
       "lustreSubnetPrefix": "10.0.0.0/21",
@@ -275,7 +273,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "[uri(deployment().properties.templateLink.uri, 'scripts/install_lustre_client.sh')]"
+                      "[concat(variables('myTemplateLink'),  'scripts/install_lustre_client.sh')]"
                     ],
                     "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts')]"
                   }
