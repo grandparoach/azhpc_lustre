@@ -344,8 +344,8 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "[concat(variables('myTemplateLink'), 'scripts/master-setup.sh'))]",
-                      "[concat(variables('myTemplateLink'), 'scripts/install_lustre.sh'))]"
+                      "[concat(variables('myTemplateLink'), 'scripts/master-setup.sh')]",
+                      "[concat(variables('myTemplateLink'), 'scripts/install_lustre.sh')]"
                     ],
                     "commandToExecute": "[concat('bash master-setup.sh ',variables('nodeOSSettings').adminUserName,';','bash install_lustre.sh ', 'meta',' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts')]"
                   }
