@@ -16,7 +16,10 @@
         },
         "vnetRG": {
 			"value": "_RG"
-        },
+		},
+		"mgsNodeName": {
+			"value": "mgsmdt000000"
+		},
         "adminUsername": {
 			"value": "lustreuser"
         },
