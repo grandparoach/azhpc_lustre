@@ -24,7 +24,7 @@
 			"value": "_SSHKEY"
         },
         "storageDiskSize": {
-			"value": "p50"
+			"value": "P50"
         },
         "StorageDisksCount": {
 			"value": _SDS

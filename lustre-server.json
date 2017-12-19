@@ -108,6 +108,7 @@
     }
   },
   "variables": {
+    "myTemplateLink": "https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/",
     "virtualNetworkName": "lustre-vnet",
     "vmssNameVolume": "[concat(variables('vmssName'), 'last')]",
     "addressPrefix": "10.0.0.0/16",
@@ -337,7 +338,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "[uri(deployment().properties.templateLink.uri, 'scripts/install_lustre_storage.sh')]"                      
+                      "[concat(variables('myTemplateLink'),  'scripts/install_lustre_storage.sh')]"                      
                     ],
                     "commandToExecute": "[concat('bash install_lustre_storage.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts',' ',variables('vmssName'),' ',variables('resourceGroup'),' ',variables('clientId'),' ',variables('clientSecret'),' ',variables('tenantId'),' ',variables('nodeCount'))]"
                   }
