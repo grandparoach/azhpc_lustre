@@ -20,7 +20,7 @@ sshkey=`cat id_rsa_lustre.pub`
 sed -i "s%_SSHKEY%$sshkey%g" parameters-master.json
 
 az group deployment validate -o table --resource-group $RG --template-file lustre-master.json --parameters @parameters-master.json
-az group deployment create --name lustremasterdeployment -o table --resource-group $RG --template-file lustre-master.json --parameters @parameters-master.json
+az group deployment create --name lustre-master-deployment -o table --resource-group $RG --template-file lustre-master.json --parameters @parameters-master.json
 
 mv parameters-master.json $LOGDIR/parameters-master.json
 mv .parameters-master.json.orig parameters-master.json
@@ -44,7 +44,7 @@ sed -i "s%_SDS%$storageDisks%g" parameters-server.json
 sed -i "s%_SSHKEY%$sshkey%g" parameters-server.json
 
 az group deployment validate -o table --resource-group $RG --template-file lustre-server.json --parameters @parameters-server.json
-az group deployment create --name lustreserverdeployment -o table --resource-group $RG --template-file lustre-server.json --parameters @parameters-server.json
+az group deployment create --name lustre-server-deployment -o table --resource-group $RG --template-file lustre-server.json --parameters @parameters-server.json
 
 mv parameters-server.json $LOGDIR/parameters-server.json
 mv .parameters-server.json.orig parameters-server.json
@@ -58,7 +58,7 @@ sed -i "s%_RG%$RG%g" parameters-client.json
 sed -i "s%_SSHKEY%$sshkey%g" parameters-client.json
 
 az group deployment validate -o table --resource-group $RG --template-file lustre-client.json --parameters @parameters-client.json
-az group deployment create --name lustreclientdeployment -o table --resource-group $RG --template-file lustre-client.json --parameters @parameters-client.json
+az group deployment create --name lustre-client-deployment -o table --resource-group $RG --template-file lustre-client.json --parameters @parameters-client.json
 
 mv parameters-client.json $LOGDIR/parameters-client.json
 mv .parameters-client.json.orig parameters-client.json
