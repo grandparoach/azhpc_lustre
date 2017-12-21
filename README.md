@@ -10,7 +10,14 @@ Table of Contents
   * [Deploy Lustre OSS](#Deploy-Lustre-OSS)
   * [Deploy Lustre Client](#Deploy-Lustre-Client)
 
-# Quickstart
+# Quickstart 1
+To deploy an Infiniband enabled compute cluster with a Lustre File Server attached and mounted:
+1. Make sure you have quota for H-series (compute cluster) and DV2-series (jumpbox and storage cluster)
+2. Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal
+3. Clone the repository, `git clone https://github.com/tanewill/azhpc_lustre`
+
+
+# Quickstart 2
 * Deploy the Lustre MDS/MGS
 
   [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Flustre-master.json) 
