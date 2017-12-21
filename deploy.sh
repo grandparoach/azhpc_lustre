@@ -20,7 +20,7 @@ ssh-keygen -t rsa -N "" -f id_rsa_lustre
 sshkey=`cat id_rsa_lustre.pub`
 sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-master.json
 
-az group deployment validate -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-master.json
+az group deployment validate -o table --resource-group $RG --template-file templates/lustre-master.json --parameters @parameters/parameters-master.json
 az group deployment create --name lustre-master-deployment -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-master.json
 
 mv parameters/parameters-master.json $LOGDIR/parameters/parameters-master.json
@@ -58,7 +58,7 @@ sed -i "s%_COMPNODES%$computeNodes%g" parameters/parameters-client.json
 sed -i "s%_RG%$RG%g" parameters/parameters-client.json
 sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-client.json
 
-az group deployment validate -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-client.json
+az group deployment validate -o table --resource-group $RG --template-file templates/lustre-client.json --parameters @parameters/parameters-client.json
 az group deployment create --name lustre-client-deployment -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-client.json
 
 mv parameters/parameters-client.json $LOGDIR/parameters/parameters-client.json
