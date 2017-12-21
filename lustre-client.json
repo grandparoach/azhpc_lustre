@@ -1,13 +1,13 @@
 {
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
-  "parameters": {  
+  "parameters": {
     "vmssName": {
       "type": "string",
-        "metadata": {
-          "description": "Master VMSS name."
-        },
-        "maxLength": 15
+      "metadata": {
+        "description": "Master VMSS name."
+      },
+      "maxLength": 15
     },
     "nodeCount": {
       "type": "int",
@@ -54,9 +54,7 @@
         "Standard_L4s",
         "Standard_L8s",
         "Standard_L16s",
-        "Standard_L32s",
-        "Standard_H16r",
-        "Standard_H16mr"
+        "Standard_L32s"
       ],
       "metadata": {
         "description": "sku to use for the storage nodes - only premium disks VMs are allowed"
@@ -67,8 +65,7 @@
       "defaultValue": "CentOS_7.3",
       "allowedValues": [
         "CentOS_7.2",
-        "CentOS_7.3",
-        "CentOS_7.1-HPC"
+        "CentOS_7.3"
       ],
       "metadata": {
         "description": "VM Image."
@@ -101,20 +98,30 @@
     }
   },
   "variables": {
-    "myTemplateLink": "https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/",
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
-    "subnetPrefix2": "10.0.1.0/24",
-    "subnetName": "lustre-subnet",
-    "subnetName2": "compute-subnet",
     "virtualNetworkName": "lustre-vnet",
     "vnetRG": "[parameters('vnetRG')]",
+    "subnetName": "lustre-subnet",
     "mgsNodeName": "[parameters('mgsNodeName')]",
+    "publicIPAddressName": "[concat(parameters('vmssName'), 'pip')]",
+    "loadBalancerName": "[concat(parameters('vmssName'), 'lb')]",
+    "publicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]",
+    "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
+    "natPoolName": "[concat(parameters('vmssName'), 'natpool')]",
+    "bePoolName": "[concat(parameters('vmssName'), 'bepool')]",
+    "natStartPort": 50000,
+    "natEndPort": 52000,
+    "natBackendPort": 22,
     "nicName": "[concat(parameters('vmssName'), 'nic')]",
     "ipConfigName": "[concat(parameters('vmssName'), 'ipconfig')]",
+    "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
     "networkApiVersion": "2016-06-01",
     "insightsApiVersion": "2015-04-01",
     "location": "[resourceGroup().location]",
+    "installLIS": "bash InstallLIS.sh",
+    "templatelink": "[uri(deployment().properties.templateLink.uri, 'Scripts')]",
+    "installLIS": "bash InstallLIS.sh",
     "networkSettings": {
       "addressPrefix": "10.0.0.0/20",
       "lustreSubnetPrefix": "10.0.0.0/21",
@@ -158,12 +165,6 @@
         "offer": "RHEL",
         "sku": "7.2",
         "version": "latest"
-      },
-      "CentOS_7.1-HPC": {
-        "publisher": "OpenLogic",
-        "offer": "CentOS-HPC",
-        "sku": "7.1",
-        "version": "7.1.20160408"
       }
     },
     "nodeOSSettings": {
@@ -178,7 +179,8 @@
     "lustreInstall": "[concat('bash install_lustre.sh ', 'lustre000000', ' client')]"
   },
   "resources": [
-    { "type": "Microsoft.Network/virtualNetworks",
+    {
+      "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('networkApiVersion')]",
@@ -194,22 +196,81 @@
             "properties": {
               "addressPrefix": "[variables('subnetPrefix')]"
             }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[variables('location')]",
+      "apiVersion": "[variables('networkApiVersion')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('vmssName')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/loadBalancers",
+      "name": "[variables('loadBalancerName')]",
+      "location": "[variables('location')]",
+      "apiVersion": "[variables('networkApiVersion')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
+      ],
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "LoadBalancerFrontEnd",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[variables('publicIPAddressID')]"
+              }
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "[variables('bePoolName')]"
+          }
+        ],
+        "inboundNatPools": [
+          {
+            "name": "[variables('natPoolName')]",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('frontEndIPConfigID')]"
+              },
+              "protocol": "tcp",
+              "frontendPortRangeStart": "[variables('natStartPort')]",
+              "frontendPortRangeEnd": "[variables('natEndPort')]",
+              "backendPort": "[variables('natBackendPort')]"
+            }
           },
           {
-            "name": "[variables('subnetName2')]",
+            "name": "natpool2",
             "properties": {
-              "addressPrefix": "[variables('subnetPrefix2')]"
+              "frontendIPConfiguration": {
+                "id": "[variables('frontEndIPConfigID')]"
+              },
+              "protocol": "tcp",
+              "frontendPortRangeStart": "9000",
+              "frontendPortRangeEnd": "9120",
+              "backendPort": "9000"
             }
           }
         ]
       }
-    }, 
+    },
     {
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[parameters('vmssName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('computeApiVersion')]",
       "dependsOn": [
+        "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
       ],
       "sku": {
@@ -226,9 +287,6 @@
           "storageProfile": {
             "osDisk": {
               "createOption": "FromImage",
-              "managedDisk": {
-                "storageAccountType": "Standard_LRS"
-              },
               "caching": "ReadOnly"
             },
             "imageReference": "[variables('nodeOSSettings').imageReference]",
@@ -261,7 +319,20 @@
                       "properties": {
                         "subnet": {
                           "id": "[variables('networkSettings').lustreSubnetRef]"
-                        }
+                        },
+                        "loadBalancerBackendAddressPools": [
+                          {
+                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolName'))]"
+                          }
+                        ],
+                        "loadBalancerInboundNatPools": [
+                          {
+                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/', variables('natPoolName'))]"
+                          },
+                          {
+                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/natpool2')]"
+                          }
+                        ]
                       }
                     }
                   ]
@@ -280,9 +351,9 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "[concat(variables('myTemplateLink'),  'scripts/install_lustre_client.sh')]"
+                      "[uri(deployment().properties.templateLink.uri, 'scripts/install_lustre_client.sh')]"
                     ],
-                    "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts')]"
+                    "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/azmigproject/LustreFS-ARM/master/scripts')]"
                   }
                 }
               }
