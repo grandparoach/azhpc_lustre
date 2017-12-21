@@ -98,6 +98,7 @@
     }
   },
   "variables": {
+    "templateLink": "https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/",
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
     "virtualNetworkName": "lustre-vnet",
@@ -351,9 +352,9 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "[uri(deployment().properties.templateLink.uri, 'scripts/install_lustre_client.sh')]"
+                      "[concat(variables('templateLink'), 'scripts/install_lustre_client.sh')]"
                     ],
-                    "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/azmigproject/LustreFS-ARM/master/scripts')]"
+                    "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts')]"
                   }
                 }
               }
