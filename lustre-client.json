@@ -128,7 +128,6 @@
       "lustreSubnetPrefix": "10.0.0.0/21",
       "lustresubnetRef": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/',variables('vnetRG'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName'))]"
     },
-
     "PremiumStorageMap": {
       "P10": {
         "size": 128
@@ -138,6 +137,12 @@
       },
       "P30": {
         "size": 1023
+      },
+      "P40": {
+        "size": 2047
+      },
+      "P50": {
+        "size": 4094
       }
     },
     "image": "[parameters('VMImage')]",
