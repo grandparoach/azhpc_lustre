@@ -37,9 +37,9 @@ CID=`grep user_id: cred_lustre.yaml | awk '{print $2}'`
 CSEC=`grep password_id: cred_lustre.yaml | awk '{print $2}'`
 TENID=`grep tenant_id: cred_lustre.yaml | awk '{print $2}'`
 
-sed -i "s%_CID%$CID" parameters-server.json
-sed -i "s%_CSEC%$CSEC" parameters-server.json
-sed -i "s%_TENID%$TENID" parameters-server.json
+sed -i "s%_CID%$CID%g" parameters-server.json
+sed -i "s%_CSEC%$CSEC%g" parameters-server.json
+sed -i "s%_TENID%$TENID%g" parameters-server.json
 sed -i "s%_SDS%$storageDisks%g" parameters-server.json
 sed -i "s%_SSHKEY%$sshkey%g" parameters-server.json
 
