@@ -3,6 +3,7 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
 PURPLE='\033[0;35m'
+WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 echo -e "I ${RED}love${NC} Stack Overflow"
 #set -x
@@ -26,9 +27,18 @@ STARTTIME=`date +%Y%m%d_%H%M%S`
 LOGDIR=LOGDIR_"$STARTTIME"_$RG
 mkdir -p $LOGDIR/parameters
 
+echo -e "${GREEN}********************************************************************************${NC}"
+echo -e "${WHITE}Creating a File Server:"
+echo -e "${YELLOW}$serverNodes ${WHITE}Storage Nodes"
+echo -e "with ${YELLOW}$storageDisks, 4TB ${WHITE}disks each"
+echo -e "${YELLOW}`expr $serverNodes \* $storageDisks \* 4`TB ${WHITE}total storage"
+echo -e "and ${YELLOW}$computeNodes ${NC}compute nodes"
+echo -e "${GREEN}********************************************************************************${NC}"
+echo
+
 #CREATE MASTER CLUSTER and JUMPBOX USING THE TEMPLATES
-az group create -l northcentralus -n $RG -o table
 echo -e "${GREEN}################ Creating MGSMDT @ ${YELLOW}$STARTTIME${NC}"
+az group create -l northcentralus -n $RG -o table
 cp parameters/parameters-master.json parameters/.parameters-master.json.orig
 ssh-keygen -t rsa -N "" -f id_rsa_lustre > /dev/null
 sshkey=`cat id_rsa_lustre.pub`
@@ -36,7 +46,7 @@ sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-master.json
 
 echo -e "${PURPLE}################ Validation${NC}"
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-master.json --parameters @parameters/parameters-master.json
-echo -e "${BLUE}################ Deployment"
+echo -e "${BLUE}################ Deployment${NC}"
 az group deployment create --name lustre-master-deployment -o table --resource-group $RG --template-file templates/lustre-master.json --parameters @parameters/parameters-master.json
 
 mv parameters/parameters-master.json $LOGDIR/parameters/parameters-master.json
@@ -63,6 +73,7 @@ sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-server.json
 
 echo -e "${PURPLE}################ Validation${NC}"
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-server.json
+echo -e "${BLUE}################ Deployment${NC}"
 az group deployment create --name lustre-server-deployment -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-server.json
 
 mv parameters/parameters-server.json $LOGDIR/parameters/parameters-server.json
@@ -78,6 +89,7 @@ sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-client.json
 
 echo -e "${PURPLE}################ Validation${NC}"
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-client.json --parameters @parameters/parameters-client.json
+echo -e "${BLUE}################ Deployment${NC}"
 az group deployment create --name lustre-client-deployment -o table --resource-group $RG --template-file templates/lustre-client.json --parameters @parameters/parameters-client.json
 
 mv parameters/parameters-client.json $LOGDIR/parameters/parameters-client.json
@@ -85,4 +97,4 @@ mv parameters/.parameters-client.json.orig parameters/.parameters-client.json
 ENDTIME=`date +%Y%m%d_%H%M%S`
 echo -e  "${GREEN}################' Deployment started @ ${YELLOW}$STARTTIME${NC}"
 echo -e  "${GREEN}################' Deployment completed @ ${YELLOW}$ENDDTIME${NC}"
-echo -e  "${GREEN}################' Connection string: ssh -i id_rsa_lustre lustreuser@$pubip
+echo -e  "${WHITE}################' Connection string: ssh -i id_rsa_lustre lustreuser@$pubip${NC}"
