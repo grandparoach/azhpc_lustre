@@ -54,6 +54,24 @@
       "metadata": {
         "description": "SSH rsa public key file as a string."
       }
+    },
+    "clientId": {
+      "type": "string",
+      "metadata": {
+        "description": "ClientId for az login."
+      }
+    },
+    "clientSecret": {
+      "type": "securestring",
+      "metadata": {
+        "description": "ClientSecret for az login."
+      }
+    },
+    "tenantId": {
+      "type": "string",
+      "metadata": {
+        "description": "tenantId for az login."
+      }
     }
   },
   "variables": {
@@ -231,6 +249,9 @@
       "name": "[variables('jumpboxName')]",
       "apiVersion": "[variables('computeApiVersion')]",
       "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/',concat(variables('jumpboxName'),'nic'))]"
+      ],
       "properties": {
         "hardwareProfile": {
           "vmSize": "Standard_D4_v2"
@@ -266,9 +287,26 @@
           }]
         }
       },
-      "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/',concat(variables('jumpboxName'),'nic'))]"
-      ]
+      "resources": [
+        { "type": "extensions",
+        "apiVersion": "2017-03-30",
+        "name": "jumpboxconfiguration",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+          "[concat('Microsoft.Compute/virtualMachines/', variables('jumpboxName'))]"
+        ],
+        "properties": { "type": "CustomScript",
+          "publisher": "Microsoft.Azure.Extensions",
+          "typeHandlerVersion": "2.0",
+          "autoUpgradeMinorVersion": true,
+          "settings": {
+            "fileUris": [
+              "[concat(variables('myTemplateLink'), 'scripts/configure_jumpbox.sh')]"
+            ],
+            "commandToExecute": "[concat('bash configure_jumpbox.sh ',parameters('clientId'),' ',parameters('clientSecret'),' ',parameters('tenantId'))]"
+          }
+        }
+      }]
     },
     { "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[variables('vmssName')]",

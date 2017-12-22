@@ -5,7 +5,6 @@ GREEN='\033[0;32m'
 PURPLE='\033[0;35m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
-echo -e "I ${RED}love${NC} Stack Overflow"
 #set -x
 
 #BELOW LINE IS FOR TESTING
@@ -16,10 +15,11 @@ serverNodes=8
 storageDisks=8
 computeNodes=5
 
-:'
+: '
 userName=lustreuser
 computeNodeSku=
 computeNodeImage
+location=
 '
 
 #set -xeuo pipefail
@@ -28,7 +28,7 @@ LOGDIR=LOGDIR_"$STARTTIME"_$RG
 mkdir -p $LOGDIR/parameters
 
 echo -e "${GREEN}********************************************************************************${NC}"
-echo -e "${WHITE}Creating a File Server:"
+echo -e "${WHITE}Creating a Lustre file server:"
 echo -e "${YELLOW}$serverNodes ${WHITE}Storage Nodes"
 echo -e "with ${YELLOW}$storageDisks, 4TB ${WHITE}disks each"
 echo -e "${YELLOW}`expr $serverNodes \* $storageDisks \* 4`TB ${WHITE}total storage"
@@ -58,6 +58,7 @@ mv id_rsa_lustre* $LOGDIR/
 touch $LOGDIR/$pubip
 
 #CREATE OSS SERVER
+echo
 echo -e "${GREEN}################ Creating OSS Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}"
 cp parameters/parameters-server.json parameters/.parameters-server.json.orig
 CID=`grep user_id: parameters/cred_lustre.yaml | awk '{print $2}'`
@@ -80,6 +81,7 @@ mv parameters/parameters-server.json $LOGDIR/parameters/parameters-server.json
 mv parameters/.parameters-server.json.orig parameters/parameters-server.json
 
 #CREATE CLIENTS
+echo
 echo -e  "${GREEN}################ Creating Compute Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}" 
 cp parameters/parameters-client.json parameters/.parameters-client.json.orig
 
@@ -95,6 +97,6 @@ az group deployment create --name lustre-client-deployment -o table --resource-g
 mv parameters/parameters-client.json $LOGDIR/parameters/parameters-client.json
 mv parameters/.parameters-client.json.orig parameters/.parameters-client.json
 ENDTIME=`date +%Y%m%d_%H%M%S`
-echo -e  "${GREEN}################' Deployment started @ ${YELLOW}$STARTTIME${NC}"
-echo -e  "${GREEN}################' Deployment completed @ ${YELLOW}$ENDDTIME${NC}"
-echo -e  "${WHITE}################' Connection string: ssh -i id_rsa_lustre lustreuser@$pubip${NC}"
+echo -e  "${GREEN}################ Deployment started @ ${YELLOW}$STARTTIME${NC}"
+echo -e  "${GREEN}################ Deployment complete @ ${YELLOW}$ENDTIME${NC}"
+echo -e  "${WHITE}################ Connection string: ssh -i id_rsa_lustre lustreuser@$pubip${NC}"
