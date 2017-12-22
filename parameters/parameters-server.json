@@ -2,20 +2,26 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters":{
-        "vmssName": {
-            "value": "compute"
-        },
+		"vmssName": {
+			"value": "ossserver"
+		},
 		"nodeCount": {
-			"value": _COMPNODES
+			"value": 4
         },		
         "VMSize": {
-			"value": "Standard_H16r"
+			"value": "Standard_F8s"
 		},
 		"VMImage": {
-			"value": "CentOS_7.1-HPC"
+			"value": "CentOS_7.3"
+		},
+		"clientId": {
+			"value": "_CID"
         },
-        "vnetRG": {
-			"value": "_RG"
+        "clientSecret": {
+			"value": "_CSEC"
+        },
+        "tenantId": {
+			"value": "_TENID"
 		},
 		"mgsNodeName": {
 			"value": "mgsmdt000000"
@@ -25,6 +31,12 @@
         },
         "sshKeyData": {
 			"value": "_SSHKEY"
-        }
+        },
+        "storageDiskSize": {
+			"value": "P50"
+        },
+        "StorageDisksCount": {
+			"value": _SDS
+		}
 	}
 }
