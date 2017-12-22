@@ -38,11 +38,12 @@ CID=`grep user_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 CSEC=`grep password_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 TENID=`grep tenant_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 
-sed -i "s%_CID%$CID%g" parameters/parameters-server.json
-sed -i "s%_CSEC%$CSEC%g" parameters/parameters-server.json
-sed -i "s%_TENID%$TENID%g" parameters/parameters-server.json
-sed -i "s%_SDS%$storageDisks%g" parameters/parameters-server.json
-sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-server.json
+
+sed -i "s%_CID%$CID%g" parameters-server.json
+sed -i "s%_CSEC%$CSEC%g" parameters-server.json
+sed -i "s%_TENID%$TENID%g" parameters-server.json
+sed -i "s%_SDS%$storageDisks%g" parameters-server.json
+sed -i "s%_SSHKEY%$sshkey%g" parameters-server.json
 
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-server.json
 az group deployment create --name lustre-server-deployment -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-server.json
