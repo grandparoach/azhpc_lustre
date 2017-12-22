@@ -1,4 +1,4 @@
-# Azure HPC Cluster with Lustre attached
+# [DRAFT] Azure HPC Cluster with Lustre attached
 This repository was created for a simple configuration of an HPC cluster inside of Azure with a Lustre File System configured and mounted.
 
 Table of Contents
@@ -35,7 +35,7 @@ To deploy an Infiniband enabled compute cluster with a Lustre File Server attach
 The purpose of this article is to provide an introduction to IaaS HPC and HPC storage in the cloud and to provide some useful tools and information to quickly setup an HPC cluster with four different types of storage. Lustre is currently the most widely used parallel file system in HPC solutions. Lustre file systems can scale to tens of thousands of client nodes, tens of petabytes of storage. Lustre file system performed well for large file system, you can refer the testing results for the same.
 
 # Introduction
-High Performance Computing and storage in the cloud can be very confusing and it can be difficult to determine where to start. This repository is designed to be a first step in expoloring a cloud based HPC storage and compute architecture. There are many different configuration that could be used, but this repository focuses on an RDMA connected compute cluster and a Gluster file system that is attached. Three different deployment strategies are used, a Bash script for orchastration, an Azure Resource Manager (ARM) template for the compute cluster, and Azure Batch Shipyard for the file server deployment. After deployment fully independant and functioning IaaS HPC compute and storage cluster has been deployed based on the architecture below.
+High Performance Computing and storage in the cloud can be very confusing and it can be difficult to determine where to start. This repository is designed to be a first step in expoloring a cloud based HPC storage and compute architecture. There are many different configuration that could be used, but this repository focuses on an RDMA connected compute cluster and a Lustre file system that is attached. Three different deployment strategies are used, a Bash script for orchastration, an Azure Resource Manager (ARM) template for the compute cluster, and Azure Batch Shipyard for the file server deployment. After deployment fully independant and functioning IaaS HPC compute and storage cluster has been deployed based on the architecture below.
 
 # HPC in the Cloud
 - HPC in the cloud continues to gain momentum. 
@@ -77,6 +77,7 @@ There are four different types of storage that will be used for this HPC cluster
  * Three 5TB Azure Files shares mounted to the jumpbox at /mnt/lts1,/mnt/lts2,/mnt/lts3. This is a CIFS share and can be mounted to both the Windows and Linux operating systems. These Azure File shares are subject to performance limits specified here. The size can be altered by increasing the quota here: create_cluster.sh
 
 Below is an image that attempts to visualize the needed storage structure for an example workload. The Physically attached storage is the temporary storage, the Lustre is for the 'campaign' data that supports multiple workloads, finally the Azure Files share is for long term data retention.
+
 
 ![alt text](https://github.com/tanewill/azhpc_lustre/blob/master/images/WorkloadData.png)
 
