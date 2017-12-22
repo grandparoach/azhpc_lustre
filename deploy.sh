@@ -14,7 +14,7 @@ cp ../cred_lustre.yaml parameters/cred_lustre.yaml
 RG=$1
 serverNodes=8
 storageDisks=8
-computeNodes=8
+computeNodes=5
 
 :'
 userName=lustreuser

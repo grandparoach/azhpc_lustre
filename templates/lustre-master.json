@@ -233,7 +233,7 @@
       "location": "[variables('location')]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_D12_v2"
+          "vmSize": "Standard_D4_v2"
         },
         "osProfile": {
           "computerName": "[variables('jumpboxName')]",
