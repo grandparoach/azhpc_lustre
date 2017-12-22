@@ -112,6 +112,8 @@ for ip in $compip; do echo -e "${YELLOW}$ip${NC}"; done
 mv parameters/parameters-client.json $LOGDIR/parameters/parameters-client.json
 mv parameters/.parameters-client.json.orig parameters/parameters-client.json
 ENDTIME=`date +%Y%m%d_%H%M%S`
+echo
 echo -e  "${GREEN}################ Deployment started @ ${YELLOW}$STARTTIME${NC}"
 echo -e  "${GREEN}################ Deployment complete @ ${YELLOW}$ENDTIME${NC}"
-echo -e  "${WHITE}################ Connection string: ssh -i id_rsa_lustre lustreuser@$pubip${NC}"
+echo
+echo -e  "${WHITE}################ Connection string: ${YELLOW}ssh -i id_rsa_lustre lustreuser@$pubip${NC}"
