@@ -98,7 +98,7 @@ echo -e "${BLUE}################ Deployment${NC}"
 az group deployment create --name lustre-client-deployment -o table --resource-group $RG --template-file templates/lustre-client.json --parameters @parameters/parameters-client.json
 
 mv parameters/parameters-client.json $LOGDIR/parameters/parameters-client.json
-mv parameters/.parameters-client.json.orig parameters/.parameters-client.json
+mv parameters/.parameters-client.json.orig parameters/parameters-client.json
 ENDTIME=`date +%Y%m%d_%H%M%S`
 echo -e  "${GREEN}################ Deployment started @ ${YELLOW}$STARTTIME${NC}"
 echo -e  "${GREEN}################ Deployment complete @ ${YELLOW}$ENDTIME${NC}"

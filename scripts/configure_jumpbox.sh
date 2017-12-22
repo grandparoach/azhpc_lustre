@@ -17,33 +17,6 @@ if [ $# < 2 ]; then
     exit 1
 fi
 
-
-MGMT_HOSTNAME=$1
-TEMPLATELINK=$2
-
-echo "MGS - $MGMT_HOSTNAME and templatelink - $TEMPLATELINK"
-
-# Shares
-SHARE_HOME=/share/home
-SHARE_SCRATCH=/share/scratch
-
-LUSTRE_CLIENT=/mnt/lustre
-
-# User
-HPC_USER=hpcuser
-HPC_UID=7007
-HPC_GROUP=hpc
-HPC_GID=7007
-
-#install az cli
-wget https://azurecliprod.blob.core.windows.net/install.py
-python install.py << ANSWERS
-/home/$USER/lib/azure-cli
-/home/$USER/bin
-Y
-/home/$USER/.bashrc
-ANSWERS
-
 # Installs all required packages.
 install_pkgs()
 {
@@ -53,6 +26,24 @@ install_pkgs()
 
 setup_user()
 {
+
+    MGMT_HOSTNAME=$1
+    TEMPLATELINK=$2
+
+    echo "MGS - $MGMT_HOSTNAME and templatelink - $TEMPLATELINK"
+
+    # Shares
+    SHARE_HOME=/share/home
+    SHARE_SCRATCH=/share/scratch
+
+    LUSTRE_CLIENT=/mnt/lustre
+
+    # User
+    HPC_USER=hpcuser
+    HPC_UID=7007
+    HPC_GROUP=hpc
+    HPC_GID=7007
+
     mkdir -p $SHARE_HOME
     mkdir -p $SHARE_SCRATCH
 
@@ -76,6 +67,15 @@ setup_user()
 }
 az_login()
 {
+    #install az cli
+    wget https://azurecliprod.blob.core.windows.net/install.py
+    python install.py << ANSWERS
+/home/$USER/lib/azure-cli
+/home/$USER/bin
+Y
+/home/$USER/.bashrc
+ANSWERS
+
 	az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
 }
 
@@ -87,7 +87,7 @@ sed -i 's/SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
 setenforce 0
 
 install_pkgs
-setup_user
+#setup_user
 az_login
 
 shutdown -r +1 &
