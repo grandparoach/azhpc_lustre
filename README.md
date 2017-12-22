@@ -54,7 +54,7 @@ High Performance Computing and storage in the cloud can be very confusing and it
 
 # Architecture
 ## Example HPC Data Architecture
-![alt text](https://github.com/tanewill/azhpc_lustre/blob/master/support/HPC_DataArch.png)
+![alt text](https://github.com/tanewill/azhpc_lustre/blob/master/images/HPC_DataArch.png)
 
 ## Estimated Monthly Cost for North Central US
 Estimates calculated from [Azure Pricing Calculator](https://azure.microsoft.com/en-us/pricing/calculator/)
@@ -78,7 +78,7 @@ There are four different types of storage that will be used for this HPC cluster
 
 Below is an image that attempts to visualize the needed storage structure for an example workload. The Physically attached storage is the temporary storage, the Lustre is for the 'campaign' data that supports multiple workloads, finally the Azure Files share is for long term data retention.
 
-![alt text](https://github.com/tanewill/azhpc_lustre/blob/master/support/WorkloadData.png)
+![alt text](https://github.com/tanewill/azhpc_lustre/blob/master/images/WorkloadData.png)
 
 ## File System Architecture
 Lustre clusters contain four kinds of systems:
