@@ -13,6 +13,7 @@ cp ../cred_lustre.yaml parameters/cred_lustre.yaml
 
 if [ "$#" -ne 4 ]; then
     echo "Usage: ./deploy.sh [RG Name] [OSS NODES] [DISKS per NODE] [COMP NODES]"
+    exit
 fi
 
 RG=$1
