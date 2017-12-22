@@ -27,9 +27,10 @@ To deploy an Infiniband enabled compute cluster with a Lustre File Server attach
 
 6. Complete deployment will take around 40 minutes
 
-7. The ssh key will be displayed upon completion, login to the jumpbox with that command
+7. The connection string will be displayed upon completion of the deployment, the private rsa key will be located in the log directory that was created
+   - Example connection string: `ssh -i id_rsa_lustre lustreuser@52.162.252.106`
 
-8. Compute node hostips are listed in the file 
+8. OSS Server and Compute node hostips are output during the deployment, the private ssh key is located in `~/.ssh` of the jumpbox. Once connected to the compute cluster switch to user `hpcuser` using the command `sudo su hpcuser` to use the common home directory.
 
 # Purpose
 The purpose of this article is to provide an introduction to IaaS HPC and HPC storage in the cloud and to provide some useful tools and information to quickly setup an HPC cluster with four different types of storage. Lustre is currently the most widely used parallel file system in HPC solutions. Lustre file systems can scale to tens of thousands of client nodes, tens of petabytes of storage. Lustre file system performed well for large file system, you can refer the testing results for the same.
