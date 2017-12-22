@@ -7,6 +7,15 @@
 		},
 		"sshKeyData": {
 			"value": "_SSHKEY"
-		}
+		},
+		"clientId": {
+			"value": "_CID"
+        },
+        "clientSecret": {
+			"value": "_CSEC"
+        },
+        "tenantId": {
+			"value": "_TENID"
+        },
 	}
 }

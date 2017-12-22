@@ -27,6 +27,12 @@ STARTTIME=`date +%Y%m%d_%H%M%S`
 LOGDIR=LOGDIR_"$STARTTIME"_$RG
 mkdir -p $LOGDIR/parameters
 
+cp parameters/parameters-server.json parameters/.parameters-server.json.orig
+CID=`grep user_id: parameters/cred_lustre.yaml | awk '{print $2}'`
+CSEC=`grep password_id: parameters/cred_lustre.yaml | awk '{print $2}'`
+TENID=`grep tenant_id: parameters/cred_lustre.yaml | awk '{print $2}'`
+
+
 echo -e "${GREEN}********************************************************************************${NC}"
 echo -e "${WHITE}Creating a Lustre file server:"
 echo -e "${YELLOW}$serverNodes ${WHITE}Storage Nodes"
@@ -43,6 +49,9 @@ cp parameters/parameters-master.json parameters/.parameters-master.json.orig
 ssh-keygen -t rsa -N "" -f id_rsa_lustre > /dev/null
 sshkey=`cat id_rsa_lustre.pub`
 sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-master.json
+sed -i "s%_CID%$CID%g" parameters/parameters-master.json
+sed -i "s%_CSEC%$CSEC%g" parameters/parameters-master.json
+sed -i "s%_TENID%$TENID%g" parameters/parameters-master.json
 
 echo -e "${PURPLE}################ Validation${NC}"
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-master.json --parameters @parameters/parameters-master.json
@@ -60,10 +69,6 @@ touch $LOGDIR/$pubip
 #CREATE OSS SERVER
 echo
 echo -e "${GREEN}################ Creating OSS Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}"
-cp parameters/parameters-server.json parameters/.parameters-server.json.orig
-CID=`grep user_id: parameters/cred_lustre.yaml | awk '{print $2}'`
-CSEC=`grep password_id: parameters/cred_lustre.yaml | awk '{print $2}'`
-TENID=`grep tenant_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 
 sed -i "s%_OSSNODES%$serverNodes%g" parameters/parameters-server.json
 sed -i "s%_CID%$CID%g" parameters/parameters-server.json
