@@ -2,13 +2,6 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vmssName": {
-      "type": "string",
-      "metadata": {
-        "description": "Master VMSS name."
-      },
-      "maxLength": 15
-    },
     "nodeCount": {
       "type": "int",
       "metadata": {
@@ -60,17 +53,6 @@
         "description": "sku to use for the storage nodes - only premium disks VMs are allowed"
       }
     },
-    "VMImage": {
-      "type": "string",
-      "defaultValue": "CentOS_7.3",
-      "allowedValues": [
-        "CentOS_7.2",
-        "CentOS_7.3"
-      ],
-      "metadata": {
-        "description": "VM Image."
-      }
-    },
     "clientId": {
       "type": "string",
       "metadata": {
@@ -87,12 +69,6 @@
       "type": "string",
       "metadata": {
         "description": "tenantId for az login."
-      }
-    },
-    "mgsNodeName": {
-      "type": "string",
-      "metadata": {
-        "description": "mgsNodeName ."
       }
     },
     "adminUsername": {
@@ -132,43 +108,29 @@
     }
   },
   "variables": {
-    "templateLink": "https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/",
+    "myTemplateLink": "https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/",
+    "virtualNetworkName": "lustre-vnet",
+    "vmssNameVolume": "[concat(variables('vmssName'), 'last')]",
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",
-    "virtualNetworkName": "lustre-vnet",
-    "vmsscount": 2,
-    "vmssNameVolume": "[concat(parameters('vmssName'), 'last')]",
-    "vmssCountVolume": 1,
+    "subnetPrefix2": "10.0.1.0/24",
     "subnetName": "lustre-subnet",
-    "vmssName": "[parameters('vmssName')]",
-    "mgsNodeName": "[parameters('mgsNodeName')]",
+    "subnetName2": "compute-subnet",
+    "vmssName": "ossserver",
+    "mgsNodeName": "mgsmdt000000",
     "nodeCount": "[parameters('nodeCount')]",
     "resourceGroup": "[resourceGroup().name]",
     "clientId": "[parameters('clientId')]",
     "clientSecret": "[parameters('clientSecret')]",
     "tenantId": "[parameters('tenantId')]",
-    "publicIPAddressName": "[concat(parameters('vmssName'), 'pip')]",
-    "publicIPAddressName2": "[concat(parameters('vmssName'), 'pip2')]",
-    "loadBalancerName": "[concat(parameters('vmssName'), 'lb')]",
-    "loadBalancerName1": "[concat(parameters('vmssName'), 'lb1')]",
-    "publicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]",
-    "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
-    "natPoolName": "[concat(parameters('vmssName'), 'natpool')]",
-    "bePoolName": "[concat(parameters('vmssName'), 'bepool')]",
-    "natStartPort": 50000,
-    "natEndPort": 52000,
-    "natBackendPort": 22,
     "storageDiskSize": "[variables('PremiumStorageMap')[parameters('storageDiskSize')].size]",
     "numStorageDisks": "[parameters('storageDisksCount')]",
     "numMetadataDisks": 0,
-    "nicName": "[concat(parameters('vmssName'), 'nic')]",
-    "ipConfigName": "[concat(parameters('vmssName'), 'ipconfig')]",
-    "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontEnd')]",
+    "nicName": "[concat(variables('vmssName'), 'nic')]",
+    "ipConfigName": "[concat(variables('vmssName'), 'ipconfig')]",
     "networkApiVersion": "2016-06-01",
     "insightsApiVersion": "2015-04-01",
     "location": "[resourceGroup().location]",
-    "installLIS": "bash InstallLIS.sh",
-    "installLIS": "bash InstallLIS.sh",
     "PremiumStorageMap": {
       "P10": {
         "size": 128
@@ -186,7 +148,7 @@
         "size": 4094
       }
     },
-    "image": "[parameters('VMImage')]",
+    "image": "CentOS_7.3",
     "lustreNodeSettings": {
       "VMsku": "[parameters('VMSize')]",
       "storageDiskSize": "[variables('PremiumStorageMap')[parameters('storageDiskSize')].size]",
@@ -276,8 +238,7 @@
     ]
   },
   "resources": [
-    {
-      "type": "Microsoft.Network/virtualNetworks",
+    { "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('networkApiVersion')]",
@@ -293,81 +254,21 @@
             "properties": {
               "addressPrefix": "[variables('subnetPrefix')]"
             }
-          }
-        ]
-      }
-    },   
-    {
-      "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
-      "location": "[variables('location')]",
-      "apiVersion": "[variables('networkApiVersion')]",
-      "properties": {
-        "publicIPAllocationMethod": "Dynamic",
-        "dnsSettings": {
-          "domainNameLabel": "[parameters('vmssName')]"
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Network/loadBalancers",
-      "name": "[variables('loadBalancerName')]",
-      "location": "[variables('location')]",
-      "apiVersion": "[variables('networkApiVersion')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'))]"
-      ],
-      "properties": {
-        "frontendIPConfigurations": [
-          {
-            "name": "LoadBalancerFrontEnd",
-            "properties": {
-              "publicIPAddress": {
-                "id": "[variables('publicIPAddressID')]"
-              }
-            }
-          }
-        ],
-        "backendAddressPools": [
-          {
-            "name": "[variables('bePoolName')]"
-          }
-        ],
-        "inboundNatPools": [
-          {
-            "name": "[variables('natPoolName')]",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPortRangeStart": "[variables('natStartPort')]",
-              "frontendPortRangeEnd": "[variables('natEndPort')]",
-              "backendPort": "[variables('natBackendPort')]"
-            }
           },
           {
-            "name": "natpool2",
+            "name": "[variables('subnetName2')]",
             "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPortRangeStart": "9000",
-              "frontendPortRangeEnd": "9120",
-              "backendPort": "9000"
+              "addressPrefix": "[variables('subnetPrefix2')]"
             }
           }
         ]
       }
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachineScaleSets",
-      "name": "[parameters('vmssName')]",
+    },  
+    { "type": "Microsoft.Compute/virtualMachineScaleSets",
+      "name": "[variables('vmssName')]",
       "location": "[variables('location')]",
       "apiVersion": "[variables('computeApiVersion')]",
       "dependsOn": [
-        "[concat('Microsoft.Network/loadBalancers/', variables('loadBalancerName'))]",
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
       ],
       "sku": {
@@ -392,7 +293,7 @@
             "dataDisks": "[concat(take(variables('storageDiskArray'), parameters('storageDisksCount')))]"
           },
           "osProfile": {
-            "computerNamePrefix": "[parameters('vmssName')]",
+            "computerNamePrefix": "[variables('vmssName')]",
             "adminUsername": "[parameters('adminUsername')]",
             "linuxConfiguration": {
               "disablePasswordAuthentication": "true",
@@ -418,20 +319,7 @@
                       "properties": {
                         "subnet": {
                           "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName'))]"
-                        },
-                        "loadBalancerBackendAddressPools": [
-                          {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolName'))]"
-                          }
-                        ],
-                        "loadBalancerInboundNatPools": [
-                          {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/', variables('natPoolName'))]"
-                          },
-                          {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/natpool2')]"
-                          }
-                        ]
+                        }
                       }
                     }
                   ]
@@ -450,7 +338,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "[concat(variables('templateLink'),'scripts/install_lustre_storage.sh')]"                      
+                      "[concat(variables('myTemplateLink'),  'scripts/install_lustre_storage.sh')]"                      
                     ],
                     "commandToExecute": "[concat('bash install_lustre_storage.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts',' ',variables('vmssName'),' ',variables('resourceGroup'),' ',variables('clientId'),' ',variables('clientSecret'),' ',variables('tenantId'),' ',variables('nodeCount'))]"
                   }

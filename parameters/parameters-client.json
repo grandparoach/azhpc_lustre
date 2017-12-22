@@ -9,10 +9,10 @@
 			"value": _COMPNODES
         },		
         "VMSize": {
-			"value": "Standard_F8s"
+			"value": "Standard_H16r"
 		},
 		"VMImage": {
-			"value": "CentOS_7.3"
+			"value": "CentOS_7.1-HPC"
         },
         "vnetRG": {
 			"value": "_RG"

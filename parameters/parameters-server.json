@@ -2,17 +2,11 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters":{
-		"vmssName": {
-			"value": "ossserver"
-		},
 		"nodeCount": {
-			"value": 4
+			"value": _OSSNODES
         },		
         "VMSize": {
 			"value": "Standard_F8s"
-		},
-		"VMImage": {
-			"value": "CentOS_7.3"
 		},
 		"clientId": {
 			"value": "_CID"
@@ -22,10 +16,7 @@
         },
         "tenantId": {
 			"value": "_TENID"
-		},
-		"mgsNodeName": {
-			"value": "mgsmdt000000"
-		},
+        },
         "adminUsername": {
 			"value": "lustreuser"
         },
