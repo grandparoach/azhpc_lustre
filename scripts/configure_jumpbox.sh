@@ -5,6 +5,7 @@ set -x
 CLIENT_ID=$1
 CLIENT_SECRET=$2
 TENANT_ID=$3
+MYUSER=$4
 
 
 if [[ $(id -u) -ne 0 ]] ; then
@@ -20,8 +21,9 @@ fi
 # Installs all required packages.
 install_pkgs()
 {
-    yum -y install epel-release
-    yum -y install openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip openmpi openmpi-devel automake autoconf pdsh htop
+    yum -y -q install epel-release
+    yum -y -q install gcc libffi-devel python-devel openssl-devel
+    yum -y install openssl openssl-libs gcc-c++ nfs-utils rpcbind mdadm wget python-pip openmpi openmpi-devel automake autoconf pdsh htop
 }
 
 setup_user()

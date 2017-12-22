@@ -303,7 +303,7 @@
             "fileUris": [
               "[concat(variables('myTemplateLink'), 'scripts/configure_jumpbox.sh')]"
             ],
-            "commandToExecute": "[concat('bash configure_jumpbox.sh ',parameters('clientId'),' ',parameters('clientSecret'),' ',parameters('tenantId'))]"
+            "commandToExecute": "[concat('bash configure_jumpbox.sh ',parameters('clientId'),' ',parameters('clientSecret'),' ',parameters('tenantId'),' ',parameters('adminUsername'))]"
           }
         }
       }]

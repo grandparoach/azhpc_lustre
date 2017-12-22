@@ -60,7 +60,10 @@ az group deployment create --name lustre-master-deployment -o table --resource-g
 mv parameters/parameters-master.json $LOGDIR/parameters/parameters-master.json
 mv parameters/.parameters-master.json.orig parameters/parameters-master.json
 
-pubip=`az network public-ip list -g $RG --query [0].['ipAddress'][0] -o tsv`    
+pubip=`az network public-ip list -g $RG --query [0].['ipAddress'][0] -o tsv`
+mgsip=`az vmss nic list -g $RG --vmss-name mgsmdt --query [*].[ipConfigurations[0].privateIpAddress] -o tsv`
+echo -e "jumpbox public ip: ${YELLOW}$pubip${NC}"
+echo -e "mgsmdt private ip: ${YELLOW}$mgsip${NC}"
 scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i id_rsa_lustre id_rsa_lustre lustreuser@$pubip:/home/lustreuser/.ssh/
 mv id_rsa_lustre* $LOGDIR/
 touch $LOGDIR/$pubip
@@ -81,6 +84,10 @@ az group deployment validate -o table --resource-group $RG --template-file templ
 echo -e "${BLUE}################ Deployment${NC}"
 az group deployment create --name lustre-server-deployment -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-server.json
 
+ossip=`az vmss nic list -g $RG --vmss-name ossserver --query [*].[ipConfigurations[0].privateIpAddress] -o tsv`
+echo "OSS Server private ip(s):"
+for ip in $ossip; do echo -e "${YELLOW}$ip${NC}"; done
+
 mv parameters/parameters-server.json $LOGDIR/parameters/parameters-server.json
 mv parameters/.parameters-server.json.orig parameters/parameters-server.json
 
@@ -96,6 +103,11 @@ echo -e "${PURPLE}################ Validation${NC}"
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-client.json --parameters @parameters/parameters-client.json
 echo -e "${BLUE}################ Deployment${NC}"
 az group deployment create --name lustre-client-deployment -o table --resource-group $RG --template-file templates/lustre-client.json --parameters @parameters/parameters-client.json
+
+compip=`az vmss nic list -g $RG --vmss-name compute --query [*].[ipConfigurations[0].privateIpAddress] -o tsv`
+echo "Compute Server private ip(s):"
+for ip in $compip; do echo -e "${YELLOW}$ip${NC}"; done
+
 
 mv parameters/parameters-client.json $LOGDIR/parameters/parameters-client.json
 mv parameters/.parameters-client.json.orig parameters/parameters-client.json
