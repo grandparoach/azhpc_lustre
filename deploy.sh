@@ -32,7 +32,7 @@ CID=`grep user_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 CSEC=`grep password_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 TENID=`grep tenant_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 
-
+echo
 echo -e "${GREEN}********************************************************************************${NC}"
 echo -e "${WHITE}Creating a Lustre file server:"
 echo -e "${YELLOW}$serverNodes ${WHITE}Storage Nodes"
