@@ -11,9 +11,9 @@ NC='\033[0m' # No Color
 cp ../cred_lustre.yaml parameters/cred_lustre.yaml
 
 RG=$1
-serverNodes=8
-storageDisks=8
-computeNodes=5
+serverNodes=2
+storageDisks=3
+computeNodes=3
 
 : '
 userName=lustreuser
