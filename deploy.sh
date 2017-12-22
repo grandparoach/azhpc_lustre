@@ -37,13 +37,14 @@ CSEC=`grep password_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 TENID=`grep tenant_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 
 echo
-echo -e "${GREEN}********************************************************************************${NC}"
-echo -e "${WHITE}Creating a Lustre file server:"
-echo -e "${YELLOW}$serverNodes ${WHITE}Storage Nodes"
-echo -e "with ${YELLOW}$storageDisks, 4TB ${WHITE}disks each"
-echo -e "${YELLOW}`expr $serverNodes \* $storageDisks \* 4`TB ${WHITE}total storage"
-echo -e "and ${YELLOW}$computeNodes ${NC}compute nodes"
-echo -e "${GREEN}********************************************************************************${NC}"
+echo -e "${GREEN}**********************************************${NC}"
+echo -e "${WHITE}Creating a Lustre file server"
+echo -e "Resource group: ${YELLOW}$RG${NC}"
+echo -e "Storage nodes: ${YELLOW}$serverNodes${NC}"
+echo -e "4TB Disks per node: ${YELLOW}$storageDisks${NC}"
+echo -e "Total storage (TB): ${YELLOW}`expr $serverNodes \* $storageDisks \* 4`${NC}"
+echo -e "Compute nodes: ${YELLOW}$computeNodes${NC}"
+echo -e "${GREEN}**********************************************${NC}"
 echo
 
 #CREATE MASTER CLUSTER and JUMPBOX USING THE TEMPLATES
