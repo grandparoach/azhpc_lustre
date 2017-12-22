@@ -9,16 +9,17 @@ RG=$1
 serverNodes=8
 storageDisks=8
 computeNodes=8
+
 #set -xeuo pipefail
 STARTTIME=`date +%Y%m%d_%H%M%S`
-LOGDIR=LOGDIR_$STARTTIME_$RG
+LOGDIR=LOGDIR_"$STARTTIME"_$RG
 mkdir -p $LOGDIR/parameters
 
 #CREATE MASTER CLUSTER and JUMPBOX USING THE TEMPLATES
-az group create -l northcentralus -n $RG
-echo ------------------------- `date +%Y%m%d_%H%M%S` Creating Compute Cluster
+az group create -l northcentralus -n $RG -o table
+echo ------------------------- Creating MGSMDT @ $STARTTIME
 cp parameters/parameters-master.json parameters/.parameters-master.json.orig
-ssh-keygen -t rsa -N "" -f id_rsa_lustre
+ssh-keygen -t rsa -N "" -f id_rsa_lustre > /dev/null
 sshkey=`cat id_rsa_lustre.pub`
 sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-master.json
 
@@ -34,7 +35,7 @@ mv id_rsa_lustre* $LOGDIR/
 touch $LOGDIR/$pubip
 
 #CREATE OSS SERVER
-echo ------------------------- `date +%Y%m%d_%H%M%S` Creating OSS Cluster
+echo ------------------------- Creating OSS Cluster @ `date +%Y%m%d_%H%M%S` 
 cp parameters/parameters-server.json parameters/.parameters-server.json.orig
 CID=`grep user_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 CSEC=`grep password_id: parameters/cred_lustre.yaml | awk '{print $2}'`
@@ -54,7 +55,7 @@ mv parameters/parameters-server.json $LOGDIR/parameters/parameters-server.json
 mv parameters/.parameters-server.json.orig parameters/parameters-server.json
 
 #CREATE CLIENTS
-echo ------------------------- `date +%Y%m%d_%H%M%S` Creating Client Cluster
+echo ------------------------- Creating Compute Cluster @ `date +%Y%m%d_%H%M%S` 
 cp parameters/parameters-client.json parameters/.parameters-client.json.orig
 
 sed -i "s%_COMPNODES%$computeNodes%g" parameters/parameters-client.json
@@ -69,4 +70,4 @@ mv parameters/.parameters-client.json.orig parameters/.parameters-client.json
 ENDTIME=`date +%Y%m%d_%H%M%S`
 echo ------------------------- Deployment started at $STARTTIME
 echo ------------------------- Deployment completed at $ENDDTIME
-echo ------------------------- Connection info: ssh -i id_rsa_lustre $pubip
+echo ------------------------- Connection info: ssh -i id_rsa_lustre lustreuser@$pubip

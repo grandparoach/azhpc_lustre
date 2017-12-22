@@ -68,7 +68,7 @@
       "allowedValues": [
         "CentOS_7.2",
         "CentOS_7.3",
-        "CentOS_7.1-HPC"
+        "CentOS_7.3-HPC"
       ],
       "metadata": {
         "description": "VM Image."
@@ -159,11 +159,11 @@
         "sku": "7.2",
         "version": "latest"
       },
-      "CentOS_7.1-HPC": {
+      "CentOS_7.3-HPC": {
         "publisher": "OpenLogic",
         "offer": "CentOS-HPC",
-        "sku": "7.1",
-        "version": "7.1.20160408"
+        "sku": "7.3",
+        "version": "latest"
       }
     },
     "nodeOSSettings": {
