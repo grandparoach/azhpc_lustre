@@ -76,7 +76,7 @@ Y
 /home/$USER/.bashrc
 ANSWERS
 
-	az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
+    az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
 }
 
 systemctl stop firewalld
