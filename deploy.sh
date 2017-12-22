@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+#set -x
 
 #BELOW LINE IS FOR TESTING
 cp ../cred_lustre.yaml parameters/cred_lustre.yaml
@@ -10,12 +10,13 @@ serverNodes=8
 storageDisks=8
 computeNodes=8
 #set -xeuo pipefail
-LOGDIR=LOGDIR_`date +%F%T`_$RG
+STARTTIME=`date +%Y%m%d_%H%M%S`
+LOGDIR=LOGDIR_$STARTTIME_$RG
 mkdir -p $LOGDIR/parameters
 
 #CREATE MASTER CLUSTER and JUMPBOX USING THE TEMPLATES
 az group create -l northcentralus -n $RG
-echo ------------------------- `date +%F" "%T` Creating Compute Cluster
+echo ------------------------- `date +%Y%m%d_%H%M%S` Creating Compute Cluster
 cp parameters/parameters-master.json parameters/.parameters-master.json.orig
 ssh-keygen -t rsa -N "" -f id_rsa_lustre
 sshkey=`cat id_rsa_lustre.pub`
@@ -33,7 +34,7 @@ mv id_rsa_lustre* $LOGDIR/
 touch $LOGDIR/$pubip
 
 #CREATE OSS SERVER
-echo ------------------------- `date +%F" "%T` Creating OSS Cluster
+echo ------------------------- `date +%Y%m%d_%H%M%S` Creating OSS Cluster
 cp parameters/parameters-server.json parameters/.parameters-server.json.orig
 CID=`grep user_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 CSEC=`grep password_id: parameters/cred_lustre.yaml | awk '{print $2}'`
@@ -53,7 +54,7 @@ mv parameters/parameters-server.json $LOGDIR/parameters/parameters-server.json
 mv parameters/.parameters-server.json.orig parameters/parameters-server.json
 
 #CREATE CLIENTS
-echo ------------------------- `date +%F" "%T` Creating Client Cluster
+echo ------------------------- `date +%Y%m%d_%H%M%S` Creating Client Cluster
 cp parameters/parameters-client.json parameters/.parameters-client.json.orig
 
 sed -i "s%_COMPNODES%$computeNodes%g" parameters/parameters-client.json
@@ -65,4 +66,7 @@ az group deployment create --name lustre-client-deployment -o table --resource-g
 
 mv parameters/parameters-client.json $LOGDIR/parameters/parameters-client.json
 mv parameters/.parameters-client.json.orig parameters/.parameters-client.json
-echo ------------------------- `date +%F" "%T` Finished
+ENDTIME=`date +%Y%m%d_%H%M%S`
+echo ------------------------- Deployment started at $STARTTIME
+echo ------------------------- Deployment completed at $ENDDTIME
+echo ------------------------- Connection info: ssh -i id_rsa_lustre $pubip
