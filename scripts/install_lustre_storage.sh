@@ -169,7 +169,6 @@ az_login
 testa()
 {
 
-#az login --service-principal -u fdebe363-1dea-48bf-8db0-b0a7835ce21f -p Admin@123 --tenant d280491c-b27a-41bf-9623-21b60cf430b3
 az vmss list-instances -g $RESOURCE_GROUP -n $VMSS_NAME>instances.json
 C=0
 while IFS= read -r hostName; do
