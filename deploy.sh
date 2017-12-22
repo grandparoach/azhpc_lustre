@@ -10,6 +10,7 @@ NC='\033[0m' # No Color
 
 #BELOW LINE IS FOR TESTING
 cp ../cred_lustre.yaml parameters/cred_lustre.yaml
+rm id_rsa*
 
 if [ "$#" -ne 4 ]; then
     echo "Usage: ./deploy.sh [RG Name] [OSS NODES] [DISKS per NODE] [COMP NODES]"
