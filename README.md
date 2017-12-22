@@ -13,15 +13,22 @@ Table of Contents
 # Quickstart 1
 To deploy an Infiniband enabled compute cluster with a Lustre File Server attached and mounted:
 1. Make sure you have quota for H-series (compute cluster) and F-series (jumpbox and storage cluster)
+
 2. Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal
+
 3. Clone the repository, `git clone https://github.com/tanewill/azhpc_lustre`
+
 4. Change directory to azhpc_lustre `cd azhpc_lustre`
+
 5. Deploy the cluster `./deploy.sh [RESOURCE_GROUP_NAME] [NUM_OSS_SERVERS] [NUM_SERVER_DISKS] [NUM_COMP_NODES]`
    - For example: `./deploy.sh LUSTRETESET-RG100 4 10 5`
    - This example would be a file server with 4 OSS servers and 40 total disks, for 160TB and 5 compute nodes
    - The total disk size is the number of OSS Servers multipled by the number of disks per server multipled by 4TB
+
 6. Complete deployment will take around 40 minutes
+
 7. The ssh key will be displayed upon completion, login to the jumpbox with that command
+
 8. Compute node hostips are listed in the file 
 
 
