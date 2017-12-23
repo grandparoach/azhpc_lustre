@@ -3,12 +3,17 @@ This repository was created for a simple configuration of an HPC cluster inside 
 
 Table of Contents
 =================
-* [Quickstart](#Lustre)
-* [Lustre](#Lustre)
-* [Deployment steps](#deployment-steps)
-  * [Deploy Lustre MDS/MGS](#Deploy-the-Lustre-MDS/MGS)
-  * [Deploy Lustre OSS](#Deploy-Lustre-OSS)
-  * [Deploy Lustre Client](#Deploy-Lustre-Client)
+* [Quickstart](#quickstart)
+* [Purpose](#purpose)
+* [HPC in the Cloud](#deployment-steps)
+* [Process](#Deploy-the-Lustre-MDS/MGS)
+  * [Credentials](#Deploy-Lustre-Client)
+  * [Storage Deployment](#Deploy-Lustre-OSS)
+* [Architecture](#architecture)
+  * [File System Architecture](#file-system-architecture)
+  * [Estimated Costs](#estimated-monthly-cost)
+* [Web Deployment](#rest-api-deployment)
+  
 
 # Quickstart
 To deploy an Infiniband enabled compute cluster with a Lustre File Server attached and mounted:
@@ -102,7 +107,9 @@ To create an Azure Service:
 ## Example HPC Data Architecture
 ![alt text](images/HPC_DataArch.png)
 
-## Estimated Monthly Cost for North Central US
+## Estimated Monthly Cost 
+for North Central US
+
 Estimates calculated from [Azure Pricing Calculator](https://azure.microsoft.com/en-us/pricing/calculator/)
  - Compute, 80 H16r cores
    - 5 H16 compute nodes @ 75% utilization, $5,459.81/month 
@@ -115,6 +122,7 @@ Estimates calculated from [Azure Pricing Calculator](https://azure.microsoft.com
 Total Cost about $40,633.81/month (~$36,764.88/month with 3 year commit)
 
 ## File System Architecture
+
 Lustre clusters contain four kinds of systems:
  * File system clients, which can be used to access the file system.
  * Object storage servers (OSSs), which provide file I/O services and manage the object storage targets (OSTs).
