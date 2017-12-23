@@ -9,7 +9,7 @@
       },
       "defaultValue": 1,
       "minValue": 1,
-      "maxValue": 100
+      "maxValue": 1000
 
     },
     "VMSize": {
