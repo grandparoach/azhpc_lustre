@@ -97,7 +97,6 @@ To create an Azure Service:
 
 4. Finally update [credentials.yaml](parameters/cred_lustre.yaml) with the output information from the previous command. Use the `appId` as the `user` in the file.
 
-https://github.com/tanewill/azhpc_lustre/blob/master/parameters/credentials.yaml
 
 # Architecture
 ## Example HPC Data Architecture
