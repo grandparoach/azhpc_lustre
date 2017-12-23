@@ -78,7 +78,7 @@ To create an Azure Service:
 
 2. First an AD app needs to be created. Type 
    ```
-   `appID=\`az ad app create --display-name "azclilogin" --password "azureadmin" --homepage "http://azclilogin" --identifier-uris "http://azclilogin" | grep "appId" | awk -F'"' '{print $4}'\`
+   appID=`az ad app create --display-name "azclilogin" --password "azureadmin" --homepage "http://azclilogin" --identifier-uris "http://azclilogin" | grep "appId" | awk -F'"' '{print $4}'`
    ```
    - If you receive an error saying the name or identifier already exists, select a new SP name. If you receive an error that you have Insufficient privilages, speak to your Azure subscription administrator
 
@@ -94,6 +94,8 @@ To create an Azure Service:
       "password": "c048762f-a17f-46c7-b8f7-d24aae7879fe",
       "tenant": "########-####-####-####-############"
    }
+
+4. Finally update [credentials.yaml](parameters/credentials.yaml) with the output information from the previous command. Use the `appId` as the `user` in the file.
 
 # Architecture
 ## Example HPC Data Architecture
