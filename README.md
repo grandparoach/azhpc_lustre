@@ -14,7 +14,9 @@ Table of Contents
 To deploy an Infiniband enabled compute cluster with a Lustre File Server attached and mounted:
 1. Make sure you have quota for H-series (compute cluster) and F-series (jumpbox and storage cluster)
 
-2. Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal
+3. Create an Azure Service Principal for the Azure CLI. Instructions [here](#credentials)
+
+2. Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal by clicking the ![alt-text](images/cs-button.png) button on the top navigation.
 
 3. Clone the repository, `git clone https://github.com/tanewill/azhpc_lustre`
 
@@ -53,21 +55,7 @@ High Performance Computing and storage in the cloud can be very confusing and it
 	
 - Now with Azure enabling over 4,000 cores for a single Infiniband enabled MPI job the dataset size can potential exceed the 2TB attached Solid State Disks. With these large datasets a simple and flexible storage solution is needed.
 
-# Architecture
-## Example HPC Data Architecture
-![alt text](https://github.com/tanewill/azhpc_lustre/blob/master/images/HPC_DataArch.png)
-
-## Estimated Monthly Cost for North Central US
-Estimates calculated from [Azure Pricing Calculator](https://azure.microsoft.com/en-us/pricing/calculator/)
- - Compute, 80 H16r cores
-   - 5 H16 compute nodes @ 75% utilization, $5,459.81/month 
- - Storage, 256 TB
-   - 1 DS3_v2 MGSMDT Server, $214.48/month
-   - 8 F8s OSS Servers, $2,330.69/month
-   - 64 (8/OSS Server) Premium, P50 Managed Disks. 256 TB, $31,716.20/month
-   - 15 TB Azure Files, $912.63/month
-
-Total Cost about $40,633.81/month (~$36,764.88/month with 3 year commit)
+# Process
 
 ## Storage Deployment
 There are four different types of storage that will be used for this HPC cluster. Using the default configuration there is over 29TB available for this compute cluster.
@@ -80,7 +68,45 @@ There are four different types of storage that will be used for this HPC cluster
 Below is an image that attempts to visualize the needed storage structure for an example workload. The Physically attached storage is the temporary storage, the Lustre is for the 'campaign' data that supports multiple workloads, finally the Azure Files share is for long term data retention.
 
 
-![alt text](https://github.com/tanewill/azhpc_lustre/blob/master/images/WorkloadData.png)
+![alt text](images/WorkloadData.png)
+
+## Credentials
+This template requires an Azure Service Principal (SP). The SP allows the nodes that are being created to login to your Azure subscription and determine the configuration of the Virtual Network in order to add nodes to the cluster as it is being created. An SP is a security identity used by user-created apps, services, and automation tools to access specific Azure resources. Think of it as a 'user identity' (login and password or certificate) with a specific role, and tightly controlled permissions to access your resources. It only needs to be able to do specific things, unlike a general user identity. It improves security if you only grant it the minimum permissions level needed to perform its management tasks. More information on Azure Service Principals's can be found [here](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
+
+To create an Azure Service:
+1.  Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal by clicking the ![alt-text](images/cs-button.png) button on the top navigation.
+
+2. First an AD app needs to be created. Type `appID=\`az ad app create --display-name "azclilogin" --password "azureadmin" --homepage "http://azclilogin" --identifier-uris "http://azclilogin" | grep "appId" | awk -F'"' '{print $4}'\``
+   If you receive an error saying the name or identifier already exists, select a new SP name. If you receive an error that you have Insufficient privilages, speak to your Azure subscription administrator
+
+3. Next the SP with a password needs to be created. Type `az ad sp create-for-rbac --name $appID`
+   ```
+   taylor@Azure:~$ az ad sp create-for-rbac --name $appID
+   Retrying role assignment creation: 1/36
+   Retrying role assignment creation: 2/36
+   {
+      "appId": "a3e9b74e-aa16-46e2-91a6-47ef57937bd5",
+      "displayName": "39500d04-e637-4749-84d6-4a20cf3167ad",
+      "name": "http://39500d04-e637-4749-84d6-4a20cf3167ad",
+      "password": "c048762f-a17f-46c7-b8f7-d24aae7879fe",
+      "tenant": "########-####-####-####-############"
+   }
+
+# Architecture
+## Example HPC Data Architecture
+![alt text](images/HPC_DataArch.png)
+
+## Estimated Monthly Cost for North Central US
+Estimates calculated from [Azure Pricing Calculator](https://azure.microsoft.com/en-us/pricing/calculator/)
+ - Compute, 80 H16r cores
+   - 5 H16 compute nodes @ 75% utilization, $5,459.81/month 
+ - Storage, 256 TB
+   - 1 DS3_v2 MGSMDT Server, $214.48/month
+   - 8 F8s OSS Servers, $2,330.69/month
+   - 64 (8/OSS Server) Premium, P50 Managed Disks. 256 TB, $31,716.20/month
+   - 15 TB Azure Files, $912.63/month
+
+Total Cost about $40,633.81/month (~$36,764.88/month with 3 year commit)
 
 ## File System Architecture
 Lustre clusters contain four kinds of systems:

@@ -13,7 +13,6 @@ COMPIMGSKU=CentOS_7.3-HPC
 OSSVMSKU=Standard_F8s
 location=northcentralus
 
-
 ############## NO EDITS BELOW THIS LINE ##############
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
