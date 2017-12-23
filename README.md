@@ -95,7 +95,7 @@ To create an Azure Service:
       "tenant": "########-####-####-####-############"
    }
 
-4. Finally update [credentials.yaml](blob/master/parameters/credentials.yaml) with the output information from the previous command. Use the `appId` as the `user` in the file.
+4. Finally update [credentials.yaml](parameters/credentials.yaml) with the output information from the previous command. Use the `appId` as the `user` in the file.
 
 # Architecture
 ## Example HPC Data Architecture
