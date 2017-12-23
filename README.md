@@ -71,13 +71,16 @@ Below is an image that attempts to visualize the needed storage structure for an
 ![alt text](images/WorkloadData.png)
 
 ## Credentials
-This template requires an Azure Service Principal (SP). The SP allows the nodes that are being created to login to your Azure subscription and determine the configuration of the Virtual Network in order to add nodes to the cluster as it is being created. An SP is a security identity used by user-created apps, services, and automation tools to access specific Azure resources. Think of it as a 'user identity' (login and password or certificate) with a specific role, and tightly controlled permissions to access your resources. It only needs to be able to do specific things, unlike a general user identity. It improves security if you only grant it the minimum permissions level needed to perform its management tasks. More information on Azure Service Principals's can be found [here](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
+This template requires an Azure Service Principal (SP). The SP allows the nodes that are being created to login to your Azure subscription and determine the configuration of the Virtual Network in order to add nodes to the cluster as it is being created. An SP is a security identity used by user-created apps, services, and automation tools to access specific Azure resources. Think of it as a 'user identity' (login and password or certificate) with a specific role, and tightly controlled permissions to access your resources. It only needs to be able to do specific things, unlike a general user identity. It improves security if you only grant it the minimum permissions level needed to perform its management tasks. More information on Azure Service Principals can be found [here](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
 
 To create an Azure Service:
 1.  Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal by clicking the ![alt-text](images/cs-button.png) button on the top navigation.
 
-2. First an AD app needs to be created. Type `appID=\`az ad app create --display-name "azclilogin" --password "azureadmin" --homepage "http://azclilogin" --identifier-uris "http://azclilogin" | grep "appId" | awk -F'"' '{print $4}'\``
-   If you receive an error saying the name or identifier already exists, select a new SP name. If you receive an error that you have Insufficient privilages, speak to your Azure subscription administrator
+2. First an AD app needs to be created. Type 
+   ```
+   `appID=\`az ad app create --display-name "azclilogin" --password "azureadmin" --homepage "http://azclilogin" --identifier-uris "http://azclilogin" | grep "appId" | awk -F'"' '{print $4}'\`
+   ```
+   - If you receive an error saying the name or identifier already exists, select a new SP name. If you receive an error that you have Insufficient privilages, speak to your Azure subscription administrator
 
 3. Next the SP with a password needs to be created. Type `az ad sp create-for-rbac --name $appID`
    ```
