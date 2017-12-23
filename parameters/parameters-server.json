@@ -6,7 +6,7 @@
 			"value": _OSSNODES
         },		
         "VMSize": {
-			"value": "Standard_F8s"
+			"value": "_OSSVMSKU"
 		},
 		"clientId": {
 			"value": "_CID"
@@ -18,7 +18,7 @@
 			"value": "_TENID"
         },
         "adminUsername": {
-			"value": "lustreuser"
+			"value": "_ADMINUSER"
         },
         "sshKeyData": {
 			"value": "_SSHKEY"

@@ -1,16 +1,26 @@
 #!/bin/bash
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
-PURPLE='\033[0;35m'
-WHITE='\033[1;37m'
-NC='\033[0m' # No Color
 #set -x
 #set -xeuo pipefail
 
 #BELOW LINE IS FOR TESTING
 cp ../cred_lustre.yaml parameters/cred_lustre.yaml
 rm id_rsa* 2> /dev/null
+
+#EDITABLE VARIABLES, CHECK TEMPLATE FOR ALLOWED VALUES
+ADMINUSER=lustreuser
+COMPVMSKU=Standard_H16r
+COMPIMGSKU=CentOS_7.3-HPC
+OSSVMSKU=Standard_F8s
+location=northcentralus
+
+
+############## NO EDITS BELOW THIS LINE ##############
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+PURPLE='\033[0;35m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
 
 if [ "$#" -ne 4 ]; then
     echo "Usage: ./deploy.sh [RG Name] [OSS NODES] [DISKS per NODE] [COMP NODES]"
@@ -21,13 +31,6 @@ RG=$1
 serverNodes=$2
 storageDisks=$3
 computeNodes=$4
-
-: '
-userName=lustreuser
-computeNodeSku=
-computeNodeImage
-location=
-'
 
 STARTTIME=`date +%Y%m%d_%H%M%S`
 LOGDIR=LOGDIR_"$STARTTIME"_$RG
@@ -50,10 +53,11 @@ echo
 
 #CREATE MASTER CLUSTER and JUMPBOX USING THE TEMPLATES
 echo -e "${GREEN}################ Creating MGSMDT @ ${YELLOW}$STARTTIME${NC}"
-az group create -l northcentralus -n $RG -o table
+az group create -l $location -n $RG -o table
 cp parameters/parameters-master.json parameters/.parameters-master.json.orig
 ssh-keygen -t rsa -N "" -f id_rsa_lustre > /dev/null
 sshkey=`cat id_rsa_lustre.pub`
+sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-master.json
 sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-master.json
 sed -i "s%_CID%$CID%g" parameters/parameters-master.json
 sed -i "s%_CSEC%$CSEC%g" parameters/parameters-master.json
@@ -79,6 +83,8 @@ touch $LOGDIR/$pubip
 echo
 echo -e "${GREEN}################ Creating OSS Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}"
 cp parameters/parameters-server.json parameters/.parameters-server.json.orig
+sed -i "s%_OSSVMSKU%$OSSVMSKU%g" parameters/parameters-server.json
+sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-server.json
 sed -i "s%_OSSNODES%$serverNodes%g" parameters/parameters-server.json
 sed -i "s%_CID%$CID%g" parameters/parameters-server.json
 sed -i "s%_CSEC%$CSEC%g" parameters/parameters-server.json
@@ -102,6 +108,9 @@ mv parameters/.parameters-server.json.orig parameters/parameters-server.json
 echo
 echo -e  "${GREEN}################ Creating Compute Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}" 
 cp parameters/parameters-client.json parameters/.parameters-client.json.orig
+sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-client.json
+sed -i "s%_COMPVMSKU%$COMPVMSKU%g" parameters/parameters-client.json
+sed -i "s%_COMPIMGSKU%$COMPIMGSKU%g" parameters/parameters-client.json
 sed -i "s%_COMPNODES%$computeNodes%g" parameters/parameters-client.json
 sed -i "s%_RG%$RG%g" parameters/parameters-client.json
 sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-client.json

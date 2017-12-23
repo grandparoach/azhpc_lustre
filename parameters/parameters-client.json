@@ -9,10 +9,10 @@
 			"value": _COMPNODES
         },		
         "VMSize": {
-			"value": "Standard_H16r"
+			"value": "_COMPVMSKU"
 		},
 		"VMImage": {
-			"value": "CentOS_7.3-HPC"
+			"value": "_COMPIMGSKU"
         },
         "vnetRG": {
 			"value": "_RG"
@@ -21,7 +21,7 @@
 			"value": "mgsmdt000000"
 		},
         "adminUsername": {
-			"value": "lustreuser"
+			"value": "_ADMINUSER"
         },
         "sshKeyData": {
 			"value": "_SSHKEY"
