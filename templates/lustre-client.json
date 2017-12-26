@@ -85,6 +85,7 @@
       "type": "string",
       "metadata": {
         "description": "Virtual Network name"
+      }
     },
     "mgsNodeName": {
       "type": "string",
