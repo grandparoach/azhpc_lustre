@@ -81,6 +81,11 @@
       }
 
     },
+    "vnetname": {
+      "type": "string",
+      "metadata": {
+        "description": "Virtual Network name"
+    },
     "mgsNodeName": {
       "type": "string",
       "metadata": {
@@ -107,7 +112,7 @@
     "subnetPrefix2": "10.0.1.0/24",
     "subnetName": "lustre-subnet",
     "subnetName2": "compute-subnet",
-    "virtualNetworkName": "lustre-vnet",
+    "virtualNetworkName": "[parameters('vnetname')]",
     "vnetRG": "[parameters('vnetRG')]",
     "mgsNodeName": "[parameters('mgsNodeName')]",
     "nicName": "[concat(parameters('vmssName'), 'nic')]",

@@ -23,6 +23,9 @@
         "sshKeyData": {
 			"value": "_SSHKEY"
         },
+		"vnetname": {
+			"value": "_VNETNAME"
+		},
         "storageDiskSize": {
 			"value": "P50"
         },

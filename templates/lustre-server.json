@@ -83,6 +83,11 @@
         "description": "SSH rsa public key file as a string."
       }
     },
+    "vnetname": {
+      "type": "string",
+      "metadata": {
+        "description": "Virtual Network name"
+    },
     "storageDiskSize": {
       "type": "string",
       "defaultValue": "P10",
@@ -109,7 +114,7 @@
   },
   "variables": {
     "myTemplateLink": "https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/",
-    "virtualNetworkName": "lustre-vnet",
+    "virtualNetworkName": "[parameters('vnetname')]",
     "vmssNameVolume": "[concat(variables('vmssName'), 'last')]",
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/24",

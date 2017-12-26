@@ -17,6 +17,9 @@
         "vnetRG": {
 			"value": "_RG"
 		},
+		"vnetname": {
+			"value": "_VNETNAME"
+		},
 		"mgsNodeName": {
 			"value": "mgsmdt000000"
 		},

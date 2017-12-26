@@ -8,6 +8,9 @@
 		"sshKeyData": {
 			"value": "_SSHKEY"
 		},
+		"vnetname": {
+			"value": "_VNETNAME"
+		},
 		"clientId": {
 			"value": "_CID"
         },

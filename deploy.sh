@@ -5,6 +5,7 @@
 #BELOW LINE IS FOR TESTING
 cp ../cred_lustre.yaml parameters/cred_lustre.yaml
 rm id_rsa* 2> /dev/null
+uuid=`cat /dev/urandom | tr -dc 'a-z' | fold -w 4 | head -n 1`
 
 #EDITABLE VARIABLES, CHECK TEMPLATE FOR ALLOWED VALUES
 ADMINUSER=lustreuser
@@ -12,6 +13,7 @@ COMPVMSKU=Standard_H16r
 COMPIMGSKU=CentOS_7.3-HPC
 OSSVMSKU=Standard_F8s
 location=northcentralus
+vnetname=vnet$uuid
 
 ############## NO EDITS BELOW THIS LINE ##############
 BLUE='\033[0;34m'
@@ -57,6 +59,7 @@ cp parameters/parameters-master.json parameters/.parameters-master.json.orig
 ssh-keygen -t rsa -N "" -f id_rsa_lustre > /dev/null
 sshkey=`cat id_rsa_lustre.pub`
 sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-master.json
+sed -i "s%_VNETNAME%$vnetname%g" parameters/parameters-master.json
 sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-master.json
 sed -i "s%_CID%$CID%g" parameters/parameters-master.json
 sed -i "s%_CSEC%$CSEC%g" parameters/parameters-master.json
@@ -83,6 +86,7 @@ echo
 echo -e "${GREEN}################ Creating OSS Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}"
 cp parameters/parameters-server.json parameters/.parameters-server.json.orig
 sed -i "s%_OSSVMSKU%$OSSVMSKU%g" parameters/parameters-server.json
+sed -i "s%_VNETNAME%$vnetname%g" parameters/parameters-server.json
 sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-server.json
 sed -i "s%_OSSNODES%$serverNodes%g" parameters/parameters-server.json
 sed -i "s%_CID%$CID%g" parameters/parameters-server.json
@@ -108,6 +112,7 @@ echo
 echo -e  "${GREEN}################ Creating Compute Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}" 
 cp parameters/parameters-client.json parameters/.parameters-client.json.orig
 sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-client.json
+sed -i "s%_VNETNAME%$vnetname%g" parameters/parameters-client.json
 sed -i "s%_COMPVMSKU%$COMPVMSKU%g" parameters/parameters-client.json
 sed -i "s%_COMPIMGSKU%$COMPIMGSKU%g" parameters/parameters-client.json
 sed -i "s%_COMPNODES%$computeNodes%g" parameters/parameters-client.json
