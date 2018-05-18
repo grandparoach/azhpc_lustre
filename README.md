@@ -23,7 +23,7 @@ To deploy an Infiniband enabled compute cluster with a Lustre File Server attach
 
 2. Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal by clicking the ![alt-text](images/cs-button.png) button on the top navigation.
 
-3. Clone the repository, `git clone https://github.com/tanewill/azhpc_lustre`
+3. Clone the repository, `git clone https://github.com/grandparoach/azhpc_lustre`
 
 4. Change directory to azhpc_lustre `cd azhpc_lustre`
 
