@@ -3,7 +3,7 @@
 #set -xeuo pipefail
 
 #BELOW LINE IS FOR TESTING
-cp ../cred_lustre.yaml parameters/cred_lustre.yaml
+#cp ../cred_lustre.yaml parameters/cred_lustre.yaml
 rm id_rsa* 2> /dev/null
 uuid=`cat /dev/urandom | tr -dc 'a-z' | fold -w 4 | head -n 1`
 
@@ -43,7 +43,7 @@ TENID=`grep tenant_id: parameters/cred_lustre.yaml | awk '{print $2}'`
 
 echo
 echo -e "${GREEN}**********************************************${NC}"
-echo -e "${WHITE}Creating a Lustre file server"
+echo -e "${WHITE}Creating a Lustre file server"${NC}
 echo -e "Resource group: ${YELLOW}$RG${NC}"
 echo -e "Storage nodes: ${YELLOW}$serverNodes${NC}"
 echo -e "4TB Disks per node: ${YELLOW}$storageDisks${NC}"
@@ -58,12 +58,12 @@ az group create -l $location -n $RG -o table
 cp parameters/parameters-master.json parameters/.parameters-master.json.orig
 ssh-keygen -t rsa -N "" -f id_rsa_lustre > /dev/null
 sshkey=`cat id_rsa_lustre.pub`
-sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-master.json
-sed -i "s%_VNETNAME%$vnetname%g" parameters/parameters-master.json
-sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-master.json
-sed -i "s%_CID%$CID%g" parameters/parameters-master.json
-sed -i "s%_CSEC%$CSEC%g" parameters/parameters-master.json
-sed -i "s%_TENID%$TENID%g" parameters/parameters-master.json
+sed -i '' "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-master.json
+sed -i '' "s%_VNETNAME%$vnetname%g" parameters/parameters-master.json
+sed -i '' "s%_SSHKEY%$sshkey%g" parameters/parameters-master.json
+sed -i '' "s%_CID%$CID%g" parameters/parameters-master.json
+sed -i '' "s%_CSEC%$CSEC%g" parameters/parameters-master.json
+sed -i '' "s%_TENID%$TENID%g" parameters/parameters-master.json
 
 echo -e "${PURPLE}################ Validation${NC}"
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-master.json --parameters @parameters/parameters-master.json
@@ -85,15 +85,15 @@ touch $LOGDIR/$pubip
 echo
 echo -e "${GREEN}################ Creating OSS Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}"
 cp parameters/parameters-server.json parameters/.parameters-server.json.orig
-sed -i "s%_OSSVMSKU%$OSSVMSKU%g" parameters/parameters-server.json
-sed -i "s%_VNETNAME%$vnetname%g" parameters/parameters-server.json
-sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-server.json
-sed -i "s%_OSSNODES%$serverNodes%g" parameters/parameters-server.json
-sed -i "s%_CID%$CID%g" parameters/parameters-server.json
-sed -i "s%_CSEC%$CSEC%g" parameters/parameters-server.json
-sed -i "s%_TENID%$TENID%g" parameters/parameters-server.json
-sed -i "s%_SDS%$storageDisks%g" parameters/parameters-server.json
-sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-server.json
+sed -i '' "s%_OSSVMSKU%$OSSVMSKU%g" parameters/parameters-server.json
+sed -i '' "s%_VNETNAME%$vnetname%g" parameters/parameters-server.json
+sed -i '' "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-server.json
+sed -i '' "s%_OSSNODES%$serverNodes%g" parameters/parameters-server.json
+sed -i '' "s%_CID%$CID%g" parameters/parameters-server.json
+sed -i '' "s%_CSEC%$CSEC%g" parameters/parameters-server.json
+sed -i '' "s%_TENID%$TENID%g" parameters/parameters-server.json
+sed -i '' "s%_SDS%$storageDisks%g" parameters/parameters-server.json
+sed -i '' "s%_SSHKEY%$sshkey%g" parameters/parameters-server.json
 
 echo -e "${PURPLE}################ Validation${NC}"
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-server.json --parameters @parameters/parameters-server.json
@@ -111,13 +111,13 @@ mv parameters/.parameters-server.json.orig parameters/parameters-server.json
 echo
 echo -e  "${GREEN}################ Creating Compute Cluster @ ${YELLOW}`date +%Y%m%d_%H%M%S`${NC}" 
 cp parameters/parameters-client.json parameters/.parameters-client.json.orig
-sed -i "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-client.json
-sed -i "s%_VNETNAME%$vnetname%g" parameters/parameters-client.json
-sed -i "s%_COMPVMSKU%$COMPVMSKU%g" parameters/parameters-client.json
-sed -i "s%_COMPIMGSKU%$COMPIMGSKU%g" parameters/parameters-client.json
-sed -i "s%_COMPNODES%$computeNodes%g" parameters/parameters-client.json
-sed -i "s%_RG%$RG%g" parameters/parameters-client.json
-sed -i "s%_SSHKEY%$sshkey%g" parameters/parameters-client.json
+sed -i '' "s%_ADMINUSER%$ADMINUSER%g" parameters/parameters-client.json
+sed -i '' "s%_VNETNAME%$vnetname%g" parameters/parameters-client.json
+sed -i '' "s%_COMPVMSKU%$COMPVMSKU%g" parameters/parameters-client.json
+sed -i '' "s%_COMPIMGSKU%$COMPIMGSKU%g" parameters/parameters-client.json
+sed -i '' "s%_COMPNODES%$computeNodes%g" parameters/parameters-client.json
+sed -i '' "s%_RG%$RG%g" parameters/parameters-client.json
+sed -i '' "s%_SSHKEY%$sshkey%g" parameters/parameters-client.json
 
 echo -e "${PURPLE}################ Validation${NC}"
 az group deployment validate -o table --resource-group $RG --template-file templates/lustre-client.json --parameters @parameters/parameters-client.json
@@ -136,4 +136,4 @@ echo
 echo -e  "${GREEN}################ Deployment started @ ${YELLOW}$STARTTIME${NC}"
 echo -e  "${GREEN}################ Deployment complete @ ${YELLOW}$ENDTIME${NC}"
 echo
-echo -e  "${WHITE}################ Connection string: ${YELLOW}ssh -i id_rsa_lustre lustreuser@$pubip${NC}"
+echo -e  "${WHITE}################ Connection string: ${YELLOW}ssh -i $LOGDIR/id_rsa_lustre lustreuser@$pubip${NC}"
