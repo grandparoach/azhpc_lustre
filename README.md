@@ -83,7 +83,7 @@ To create an Azure Service:
 
 2. First an AD app needs to be created. Type 
    ```
-   appID=`az ad app create --display-name "azclilogin" --password "azureadmin" --homepage "http://azclilogin" --identifier-uris "http://azclilogin" | grep "appId" | awk -F'"' '{print $4}'`
+   appID=`az ad app create --display-name "azclilogin" --password "azureadmin" --homepage "http://azclilogin" --identifier-uris "http://azclilogin" | grep -v "AppId" | grep -v -e "----" | awk -F ' ' '{print $1}'`
    ```
    - If you receive an error saying the name or identifier already exists, select a new SP name. If you receive an error that you have Insufficient privilages, speak to your Azure subscription administrator
 
@@ -138,13 +138,13 @@ Note- Before setup Lustre FS make sure you have service principal (id, secrete a
 
 * Deploy the Lustre MDS/MGS
 
-  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-master.json) 
+  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-master.json) 
 
 * Deploy the Lustre OSS
 
-  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-server.json)
+  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-server.json)
 
 * Deploy the Lustre Clients
 
-  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftanewill%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-client.json)
+  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-client.json)
 
