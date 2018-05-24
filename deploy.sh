@@ -72,7 +72,7 @@ az group deployment create --name lustre-master-deployment -o table --resource-g
 
 mv parameters/parameters-master.json $LOGDIR/parameters/parameters-master.json
 mv parameters/.parameters-master.json.orig parameters/parameters-master.json
-
+sleep 60
 pubip=`az network public-ip list -g $RG --query [0].['ipAddress'][0] -o tsv`
 mgsip=`az vmss nic list -g $RG --vmss-name mgsmdt --query [*].[ipConfigurations[0].privateIpAddress] -o tsv`
 echo -e "jumpbox public ip: ${YELLOW}$pubip${NC}"
