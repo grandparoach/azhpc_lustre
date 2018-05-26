@@ -288,7 +288,7 @@
                     "fileUris": [
                       "[concat(variables('myTemplateLink'),  'scripts/install_lustre_client.sh')]"
                     ],
-                    "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/tanewill/azhpc_lustre/master/scripts')]"
+                    "commandToExecute": "[concat('bash install_lustre_client.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/grandparoach/azhpc_lustre/master/scripts')]"
                   }
                 }
               }
