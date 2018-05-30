@@ -169,13 +169,13 @@ setenforce 0
 
 install_pkgs
 setup_user
-install_lustre_repo
-install_lustre
-install_ior
-setup_lustrecron
+#install_lustre_repo
+#install_lustre
+#install_ior
+#setup_lustrecron
 
 # Create marker file so we know we're configured
 touch $SETUP_MARKER
 
-shutdown -r +1 &
+#shutdown -r +1 &
 exit 0
