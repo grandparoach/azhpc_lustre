@@ -19,19 +19,17 @@ Table of Contents
 To deploy an Infiniband enabled compute cluster with a Lustre File Server attached and mounted:
 1. Make sure you have quota for H-series (compute cluster) and F-series (jumpbox and storage cluster)
 
+2. Install the Azure CLI 2.0 environment https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest 
+   - Enable Azure Government endpoints:  `az cloud set --name AzureUSGovernment`
+   - Login to your Azure Subscription:   `az login`
+   
 3. Create an Azure Service Principal for the Azure CLI. Instructions [here](#credentials)
 
-2. Install the Azure CLI 2.0 environment https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest 
+4. Clone the repository, `git clone https://github.com/grandparoach/azhpc_lustre`
 
-2.1 Enable Azure Government endpoints:  az cloud set --name AzureUSGovernment
+5. Change directory to azhpc_lustre `cd azhpc_lustre`
 
-2.2 Login to your Azure Subscription:   az login
-
-3. Clone the repository, `git clone https://github.com/grandparoach/azhpc_lustre`
-
-4. Change directory to azhpc_lustre `cd azhpc_lustre`
-
-5. Deploy the cluster `./deploy.sh [RESOURCE_GROUP_NAME] [NUM_OSS_SERVERS] [NUM_SERVER_DISKS] [NUM_COMP_NODES]`
+6. Deploy the cluster `./deploy.sh [RESOURCE_GROUP_NAME] [NUM_OSS_SERVERS] [NUM_SERVER_DISKS] [NUM_COMP_NODES]`
    - For example: `./deploy.sh LUSTRETESET-RG100 4 10 5`
    - This example would be a file server with 4 OSS servers and 40 total disks, for 160TB and 5 compute nodes
    - The total disk size is the number of OSS Servers multipled by the number of disks per server multipled by 4TB
