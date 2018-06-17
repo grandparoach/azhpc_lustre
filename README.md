@@ -25,7 +25,7 @@ To deploy an Infiniband enabled compute cluster with a Lustre File Server attach
    
 3. Create an Azure Service Principal for the Azure CLI. Instructions [here](#credentials)
 
-4. Clone the repository, `git clone https://github.com/grandparoach/azhpc_lustre`
+4. Clone the repository, `git clone https://github.com/grandparoach/azhpc_lustre` --branch gov
 
 5. Change directory to azhpc_lustre `cd azhpc_lustre`
 
