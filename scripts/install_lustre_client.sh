@@ -41,7 +41,8 @@ HPC_GID=7007
 install_pkgs()
 {
     yum -y install epel-release
-    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip openmpi openmpi-devel automake autoconf pdsh
+    # yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip openmpi openmpi-devel automake autoconf pdsh
+    yum -y install openssl openssl-devel openssl-libs nfs-utils rpcbind wget python-pip 
 }
 
 setup_user()
@@ -169,13 +170,13 @@ setenforce 0
 
 install_pkgs
 setup_user
-#install_lustre_repo
-#install_lustre
-#install_ior
-#setup_lustrecron
+install_lustre_repo
+install_lustre
+install_ior
+setup_lustrecron
 
 # Create marker file so we know we're configured
 touch $SETUP_MARKER
 
-#shutdown -r +1 &
+shutdown -r +1 &
 exit 0
