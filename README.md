@@ -21,11 +21,11 @@ To deploy an Infiniband enabled compute cluster with a Lustre File Server attach
 
 3. Create an Azure Service Principal for the Azure CLI. Instructions [here](#credentials)
 
-2. Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal by clicking the ![alt-text](images/cs-button.png) button on the top navigation.
+2. Install the Azure CLI 2.0 environment https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest 
 
-2.5 Enable Azure Government endpoints by typing this command:
+2.1 Enable Azure Government endpoints:  az cloud set --name AzureUSGovernment
 
-az cloud set --name AzureUSGovernment  
+2.2 Login to your Azure Subscription:   az login
 
 3. Clone the repository, `git clone https://github.com/grandparoach/azhpc_lustre`
 
