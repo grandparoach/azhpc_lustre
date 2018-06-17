@@ -114,7 +114,7 @@
     }
   },
   "variables": {
-    "myTemplateLink": "https://raw.githubusercontent.com/grandparoach/azhpc_lustre/master/",
+    "myTemplateLink": "https://raw.githubusercontent.com/grandparoach/azhpc_lustre/gov/",
     "virtualNetworkName": "[parameters('vnetname')]",
     "vmssNameVolume": "[concat(variables('vmssName'), 'last')]",
     "addressPrefix": "10.0.0.0/16",
