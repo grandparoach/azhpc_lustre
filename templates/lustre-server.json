@@ -346,7 +346,7 @@
                     "fileUris": [
                       "[concat(variables('myTemplateLink'),  'scripts/install_lustre_storage.sh')]"                      
                     ],
-                    "commandToExecute": "[concat('bash install_lustre_storage.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/grandparoach/azhpc_lustre/master/scripts',' ',variables('vmssName'),' ',variables('resourceGroup'),' ',variables('clientId'),' ',variables('clientSecret'),' ',variables('tenantId'),' ',variables('nodeCount'))]"
+                    "commandToExecute": "[concat('bash install_lustre_storage.sh ',variables('mgsNodeName'),' ','https://raw.githubusercontent.com/grandparoach/azhpc_lustre/gov/scripts',' ',variables('vmssName'),' ',variables('resourceGroup'),' ',variables('clientId'),' ',variables('clientSecret'),' ',variables('tenantId'),' ',variables('nodeCount'))]"
                   }
                 }
               }
