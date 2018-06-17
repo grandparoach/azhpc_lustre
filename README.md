@@ -1,5 +1,5 @@
 # [DRAFT] Azure HPC Cluster with Lustre attached
-This repository was created for a simple configuration of an HPC cluster inside of Azure with a Lustre File System configured and mounted.
+This repository was created for a simple configuration of an HPC cluster inside of Azure with a Lustre File System configured and mounted.  This Branch works with Azure Government. 
 
 Table of Contents
 =================
@@ -22,6 +22,10 @@ To deploy an Infiniband enabled compute cluster with a Lustre File Server attach
 3. Create an Azure Service Principal for the Azure CLI. Instructions [here](#credentials)
 
 2. Open the [cloud shell](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/cloud-shell/quickstart.md) from the Azure portal by clicking the ![alt-text](images/cs-button.png) button on the top navigation.
+
+2.5 Enable Azure Government endpoints by typing this command:
+
+az cloud set --name AzureUSGovernment  
 
 3. Clone the repository, `git clone https://github.com/grandparoach/azhpc_lustre`
 
@@ -138,13 +142,13 @@ Note- Before setup Lustre FS make sure you have service principal (id, secrete a
 
 * Deploy the Lustre MDS/MGS
 
-  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-master.json) 
+  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fgov%2Ftemplates%2Flustre-master.json) 
 
 * Deploy the Lustre OSS
 
-  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-server.json)
+  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fgov%2Ftemplates%2Flustre-server.json)
 
 * Deploy the Lustre Clients
 
-  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fmaster%2Ftemplates%2Flustre-client.json)
+  [![Click to deploy template on Azure](/images/deploybutton.png "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fazhpc_lustre%2Fgov%2Ftemplates%2Flustre-client.json)
 
