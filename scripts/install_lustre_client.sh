@@ -41,8 +41,7 @@ HPC_GID=7007
 install_pkgs()
 {
     yum -y install epel-release
-    # yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip openmpi openmpi-devel automake autoconf pdsh
-    yum -y install openssl openssl-devel openssl-libs nfs-utils rpcbind wget python-pip 
+    yum -y install zlib zlib-devel bzip2 bzip2-devel bzip2-libs openssl openssl-devel openssl-libs gcc gcc-c++ nfs-utils rpcbind mdadm wget python-pip openmpi openmpi-devel automake autoconf pdsh 
 }
 
 setup_user()
@@ -78,9 +77,11 @@ install_lustre_repo()
 
 install_lustre()
 {
-	yum -y install kmod-lustre-client-2.9.0-1.el7.x86_64 --disableexcludes=all 
+	# yum -y install kmod-lustre-client-2.9.0-1.el7.x86_64 --disableexcludes=all
+	yum -y install kmod-lustre-client-2.9.0-1.el7.x86_64  
 	yum -y install lustre-client-2.9.0-1.el7.x86_64
-	yum -y install lustre-client-dkms-2.9.0-1.el7.noarch --skip-broken --disableexcludes=all 
+	# yum -y install lustre-client-dkms-2.9.0-1.el7.noarch --skip-broken --disableexcludes=all 
+	yum -y install lustre-client-dkms-2.9.0-1.el7.noarch --skip-broken  
 }
 
 install_ior()
