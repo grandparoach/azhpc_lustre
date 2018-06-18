@@ -77,9 +77,11 @@ install_lustre_repo()
 
 install_lustre()
 {
-	yum -y install kmod-lustre-client-2.9.0-1.el7.x86_64 --disableexcludes=all 
+	# yum -y install kmod-lustre-client-2.9.0-1.el7.x86_64 --disableexcludes=all 
+	yum -y install kmod-lustre-client-2.9.0-1.el7.x86_64 
 	yum -y install lustre-client-2.9.0-1.el7.x86_64
-	yum -y install lustre-client-dkms-2.9.0-1.el7.noarch --skip-broken --disableexcludes=all 
+	# yum -y install lustre-client-dkms-2.9.0-1.el7.noarch --skip-broken --disableexcludes=all 
+	yum -y install lustre-client-dkms-2.9.0-1.el7.noarch --skip-broken  
 }
 
 install_ior()
@@ -169,13 +171,13 @@ setenforce 0
 
 install_pkgs
 setup_user
-#install_lustre_repo
-#install_lustre
-#install_ior
-#setup_lustrecron
+install_lustre_repo
+install_lustre
+install_ior
+setup_lustrecron
 
 # Create marker file so we know we're configured
 touch $SETUP_MARKER
 
-#shutdown -r +1 &
+shutdown -r +1 &
 exit 0
